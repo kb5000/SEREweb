@@ -1,5 +1,7 @@
 # coursezju
-
+---
+## This is a course homework website
+---
 ## Project setup
 ```
 npm install
