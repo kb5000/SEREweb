@@ -1,5 +1,43 @@
 import index from './components/index'
+import ForumExplore from './components/ForumExplore'
+import AdminPage from './components/AdminPage'
+import ForumDetail from './components/ForumDetail'
+import ForumList from './components/ForumList'
+import StudentCourseDetail from './components/StudentCourseDetail'
+import StudentCourseList from './components/StudentCourseList'
+import StudentHomework from './components/StudentHomework'
+import StudentIndex from './components/StudentIndex'
+import StudentScoreHomework from './components/StudentScoreHomework'
+import StudentTest from './components/StudentTest'
+import TeacherAddClass from './components/TeacherAddClass'
+import TeacherCourseDetail from './components/TeacherCourseDetail'
+import TeacherCourseList from './components/TeacherCourseList'
+import TeacherIndex from './components/TeacherIndex'
+import TeacherManageGroup from './components/TeacherManageGroup'
+import TeacherScoreHomework from './components/TeacherScoreHomework'
+import TeacherScoreTest from './components/TeacherScoreTest'
+import TeacherSendAnnouncement from './components/TeacherSendAnnouncement'
+import UserInfo from './components/UserInfo'
 
 export default [
   {path: '/', component: index},
+  {path: '/ForumExplore', component: ForumExplore},
+  {path: '/AdminPage', component: AdminPage},
+  {path: '/ForumDetail', component: ForumDetail},
+  {path: '/ForumList', component: ForumList},
+  {path: '/StudentCourseDetail', component: StudentCourseDetail},
+  {path: '/StudentCourseList', component: StudentCourseList},
+  {path: '/StudentHomework', component: StudentHomework},
+  {path: '/StudentIndex', component: StudentIndex},
+  {path: '/StudentScoreHomework', component: StudentScoreHomework},
+  {path: '/StudentTest', component: StudentTest},
+  {path: '/TeacherAddClass', component: TeacherAddClass},
+  {path: '/TeacherCourseDetail', component: TeacherCourseDetail},
+  {path: '/TeacherCourseList', component: TeacherCourseList},
+  {path: '/TeacherIndex', component: TeacherIndex},
+  {path: '/TeacherManageGroup', component: TeacherManageGroup},
+  {path: '/TeacherScoreHomework', component: TeacherScoreHomework},
+  {path: '/TeacherScoreTest', component: TeacherScoreTest},
+  {path: '/TeacherSendAnnouncement', component: TeacherSendAnnouncement},
+  {path: '/UserInfo', component: UserInfo},
 ]

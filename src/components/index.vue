@@ -1,3 +1,5 @@
+游客主页，显示登录页面
+
 <template>
   <div>
     hello, vue
