@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    hello, vue
+    hello, vueasdfasdf
   </div>
 </template>
 

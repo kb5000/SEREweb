@@ -3,27 +3,27 @@
 
 <template>
   <div class="page">
-    <div class="head">
-      <p class="plateName">{{plateName}}</p>
-      {{"\xa0\xa0\xa0标题"}}<input class="postTitleTextBox" type="text" v-model="postTitle"/>
-      {{"\xa0\xa0\xa0内容"}}<textarea class="postContentTextBox" v-model="postContent"/>
-      <img src="@/assets/logo.png" width="80px" height="80px"/>
+    <div class="bigFont gridCommon">{{plateName}}</div>
+    <div class="marginCommon normalFont gridCommon">
+      {{"标题"}}<input class="marginCommon postTitleTextBox" type="text" v-model="postTitle"/>
+      {{"内容"}}<textarea class="marginCommon postContentTextBox" v-model="postContent"/>
       <div class="postButtons">
-        <div class="commonButton postButton" v-on:click="onPostButtonClick">提交</div>
+        <div class="commonButton postButton" v-on:click="onPostButtonClick">发帖</div>
       </div>
     </div>
-    <div class="content">
-      <div v-for="item in postList" :key="item.id" class="postEntry">
-        <p class="postContentTitle" v-on:click="onTitleClick(item)">{{item.title}}</p>
+    <div class="marginCommon normalFont gridCommon">
+      <div v-for="item in postList" :key="item.id" class="postEntry marginCommon gridCommon">
+        <el-row style="padding: 10px">
+          <el-col span="15">{{item.title}}</el-col>
+          <el-col span="3" class="unimportantFontColor">发帖人：<a style="textDecoration: none" :href="item.userLink">{{item.userName}}</a></el-col>
+          <el-col span="4" class="unimportantFontColor">发帖时间：{{item.date}}</el-col>
+          <el-col span="2"><div class="commonButton postContentControlButton">删除</div></el-col>
+        </el-row>
+        <!-- <p class="postContentTitle" v-on:click="onTitleClick(item)">{{item.title}}</p>
         <div class="postContentControl">
-          <p class="postContentUserName">{{item.userName}}</p>
-          <p class="postContentDate">{{item.date}}</p>
           <div class="commonButton postContentControlButton">删除</div>
-        </div>
+        </div> -->
       </div>
-    </div>
-    <div class="tail">
-
     </div>
   </div>
 </template>
@@ -92,13 +92,6 @@ export default {
 </script>
 
 <style scoped>
-.page {
-  position: relative;
-  width: 80%;
-  left: 10%;
-  background-color: white;
-}
-
 .head {
   position: relative;
   padding: 3px;
@@ -112,8 +105,7 @@ export default {
 }
 
 .postTitleTextBox {
-  margin: 5px 15px;
-  width: calc(100% - 35px);
+  width: calc(100% - 10px);
   border: 1px solid;
   border-radius: 3px;
   border-color: #006b6d;
@@ -122,8 +114,7 @@ export default {
 }
 
 .postContentTextBox {
-  margin: 5px 15px 10px 15px;
-  width: calc(100% - 35px);
+  width: calc(100% - 10px);
   height: 80px;
   border: 1px solid;
   padding: 2px;
@@ -138,74 +129,38 @@ export default {
   height: 40px;
 }
 
-.commonButton {
-  padding: 5px 10px;
-  border: 1px solid;
-  border-radius: 3px;
-  background-color: #fff;
-  color: #00bbbd;
-  border-color: #00bbbd;
-  font-size: 14px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.commonButton:active {
-  color: #000000;
-  border-color: #000000;
-}
 
 .postButton {
   position: absolute;
-  right: 15px;
+  top: 3px;
+  right: 4px;
 }
 
-.content {
-  /* border: 1px solid black; */
-  margin: 0 10px;
-  width: calc(100% - 20px);
-}
 
 .postEntry {
   position: relative;
+  padding: 0px 10px;
+  /* cursor: pointer; */
 }
 
-.postContentTitle {
-  margin: 10px 10px;
-  font-size: 1.2em;
-  cursor: pointer;
-}
 
 .postContentUserName {
   position: absolute;
-  top: -10px;
+  top: -5px;
   left: -30px;
   color: rgb(100, 100, 100)
 }
 
 .postContentDate {
   position: absolute;
-  top: -10px;
+  top: -5px;
   left: 10px;
   color: rgb(100, 100, 100)
-}
-
-.postContentControl {
-  position: absolute;
-  top: 7px;
-  right: 10px;
-  width: 200px;
-  /* border: 1px solid black; */
-  height: 31px;
 }
 
 .postContentControlButton {
   position: absolute;
   right: 5px;
-}
-
-.postEntry {
-  border: 1px solid black;
-  margin: 5px;
+  top: 5px;
 }
 </style>

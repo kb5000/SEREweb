@@ -4,29 +4,55 @@
 
 <template>
   <div class="page">
-    <div class="head">
-
-    </div>
-    <div class="content">
-
-    </div>
-    <div class="tail">
-
-    </div>
+    <el-row :gutter="10">
+      <el-col :span="16">
+        <div class="bigFont gridCommon">
+          加入的板块
+          <div v-for="i in forums" :key="i.id" class="marginCommon normalFont gridCommon handCursor">
+            <el-row>
+              <el-col :span="14">{{i.name}}</el-col>
+              <el-col :span="4" class="unimportantFontColor">主题数：{{i.posts}}</el-col>
+              <el-col :span="6" class="unimportantFontColor">最后回复日期：{{i.date}}</el-col>
+            </el-row>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="8">
+        <div class="bigFont gridCommon titleGrid">
+          回复你的消息
+          <div v-for="i in replies" :key="i.id" class="marginCommon normalFont gridCommon">
+            <a class="stressFontColor" :href="i.userLink" style="text-decoration: none">{{i.user}}</a> 在帖子
+            <a class="stressFontColor" :href="i.postLink" style="text-decoration: none">{{i.post}}</a> 回复你：
+            <p>{{i.content}}</p>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 
+
 export default {
   name: 'ForumList',
   data() {
     return {
+      forums: [],
+      replies: [],
     }
   },
 
   mounted() {
+    this.forums = [
+      {id: 1, name: "软工需1班", posts: 10000, date: "2020/12/11"},
+      {id: 2, name: "软工需2班", posts: 10, date: "2020/12/11"},
+    ];
+    this.replies = [
+      {id: 1, user: "MgSO4", post: "Main函数为什么不能调用", content: "栈指针乱飞，把内存都搞乱了吧", userLink: "/", postLink: "/"},
+      {id: 2, user: "Ksssss", post: "Main函数为什么不能调用", content: "可能是第9行错了", userLink: "/", postLink: "/"},
+    ];
   },
 
   methods: {
@@ -53,10 +79,11 @@ export default {
 
 <style scoped>
 .page {
-  position: relative;
+  /* position: relative;
   width: 80%;
   left: 10%;
-  background-color: white;
+  background-color: white; */
 }
+
 
 </style>

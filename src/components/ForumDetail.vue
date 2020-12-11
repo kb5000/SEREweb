@@ -5,15 +5,17 @@
 
 <template>
   <div class="page">
-    <div class="head">
-
-    </div>
-    <div class="content">
-
-    </div>
-    <div class="tail">
-
-    </div>
+    <div class="gridCommon bigFont">{{title}}</div>
+    <el-row class="gridCommon marginCommon normalFont" v-for="i in replies" :key="i.id"
+      style="padding: 0px"
+    >
+      <el-col span="2" class="paddingCommon" style="border-right: 1px solid #D3D3D3">
+        {{i.user}}
+      </el-col>
+      <el-col span="22" class="paddingCommon">
+        
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -24,10 +26,18 @@ export default {
   name: 'ForumDetail',
   data() {
     return {
+      title: "",
+      replies: [],
     }
   },
 
   mounted() {
+    this.title = "Main函数为什么不能调用";
+    this.replies = [
+      {id: 1, user: "ABC", content: "重装VS试试", userLink: "/", date: "2020/12/12 12:33"},
+      {id: 2, user: "ABC", content: "重装VS试试", userLink: "/", date: "2020/12/12 12:33"},
+      {id: 3, user: "ABC", content: "重装VS试试", userLink: "/", date: "2020/12/12 12:33"},
+    ]
   },
 
   methods: {
@@ -53,11 +63,5 @@ export default {
 </script>
 
 <style scoped>
-.page {
-  position: relative;
-  width: 80%;
-  left: 10%;
-  background-color: white;
-}
 
 </style>
