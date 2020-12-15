@@ -17,6 +17,8 @@
 
 .handCursor {
   cursor: pointer;
+  -moz-user-select: none;
+  -webkit-user-select: none;
 }
 
 .normalFont {

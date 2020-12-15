@@ -78,12 +78,6 @@ export default {
 </script>
 
 <style scoped>
-.page {
-  /* position: relative;
-  width: 80%;
-  left: 10%;
-  background-color: white; */
-}
 
 
 </style>
