@@ -28,7 +28,7 @@
             <el-col span="8">
               用户名
             </el-col>
-            <el-col span="8">
+            <el-col span="16">
               <span>{{username}}</span>
             </el-col>
             <el-col span="8">  
@@ -38,7 +38,7 @@
             <el-col span="8">
               手机号
             </el-col>
-            <el-col span="8">
+            <el-col span="16">
               <span>{{phone}}</span>     
             </el-col>         
             <el-col span="8">
@@ -48,7 +48,7 @@
             <el-col span="8">
               邮箱
             </el-col>
-            <el-col span="8">
+            <el-col span="16">
               <span>{{email}}</span>
             </el-col>
             <el-col span="8">              
@@ -56,10 +56,15 @@
           </el-row>
         </div>
       </el-col>
+
     </el-row>
       <div slot="footer">
-        <el-button @click="close">取消</el-button>
+        <el-row style="color:red">
+            如果执行操作，该用户将无法再登录系统，确定吗？
+            <el-button @click="close">取消</el-button>
         <el-button type="danger" @click="handleConfirm">确定</el-button>
+        </el-row>
+
       </div>
     </el-dialog>
   </div>
@@ -72,6 +77,7 @@ export default {
   data() {
     return {
         rmVisible:false,
+        icon:"",
         uid:0,
         username:"",
         email:"",
@@ -85,6 +91,7 @@ export default {
   mounted() {},
   methods: {
     open(userData){
+      this.icon = userData.icon;
         this.uid = userData.uid;
         this.username = userData.username;
         this.email = userData.email;

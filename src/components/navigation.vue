@@ -18,9 +18,9 @@ export default {
       index: "/",
       courseList: "/StudentCourseList",
       forum: "/ForumList",
-      user: "/User/Info",
-      register:"/User/Register",
-      login:"/User/Login"
+      user: "/UserInfo",
+      register:"/UserRegister",
+      login:"/UserLogin"
     }
   },
 

@@ -2,9 +2,6 @@ import index from './components/index'
 import ForumExplore from './components/ForumExplore'
 import AdminPage from './components/AdminPage'
 import AdminUserManagementPage from './components/AdminUserManagementPage'
-import AdminAddUserDialog from './components/AdminAddUserDialog'
-import AdminRemoveUserDialog from './components/AdminRemoveUserDialog'
-
 import ForumDetail from './components/ForumDetail'
 import ForumList from './components/ForumList'
 import StudentCourseDetail from './components/StudentCourseDetail'
@@ -37,9 +34,7 @@ import TeacherAddTest from './components/TeacherAddTest'
 export default [
   {path: '/', component: index},
   {path: '/AdminPage', component: AdminPage},
-  {path:'/AdminPage/UserManagement',component:AdminUserManagementPage},
-  {path:'/AdminPage/UserManagement/Add',component:AdminAddUserDialog},
-  {path:'/AdminPage/UserManagement/Remove',component:AdminRemoveUserDialog},
+  {path:'/AdminPageUserManagement',component:AdminUserManagementPage},
   {path: '/ForumExplore', component: ForumExplore},
   {path: '/ForumDetail', component: ForumDetail},
   {path: '/ForumList', component: ForumList},
@@ -61,11 +56,11 @@ export default [
 
 
 
-  {path: '/User/Info', component: UserInfo},
-  {path: '/User/Login', component: UserLogin},
-  {path: '/User/Register', component: UserRegister},
-  {path: '/User/ResetPassword', component: UserResetPassword},
-  {path: '/User/ResetPassword/EmailVerify', component: UserResetPasswordEmailVerify},
+  {path: '/UserInfo', component: UserInfo},
+  {path: '/UserLogin', component: UserLogin},
+  {path: '/UserRegister', component: UserRegister},
+  {path: '/UserResetPassword', component: UserResetPassword},
+  {path: '/UserResetPasswordEmailVerify', component: UserResetPasswordEmailVerify},
 
   {path: '/TeacherAddHomework', component: TeacherAddHomework},
   {path: '/TeacherAddTest', component: TeacherAddTest},

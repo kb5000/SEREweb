@@ -44,7 +44,7 @@
             <el-link
               :style="{ float: 'right' }"
               type="primary"
-              href="/User/ResetPassword/EmailVerify"
+              href="/UserResetPasswordEmailVerify"
               >忘了密码？</el-link
             >
           </el-row>
@@ -93,7 +93,7 @@ export default {
   mounted() {},
   methods: {
     goToRegisterPage() {
-      this.$router.push("/User/Register");
+      this.$router.push("/UserRegister");
     },
     login() {
       this.$refs["elForm"].validate((valid) => {

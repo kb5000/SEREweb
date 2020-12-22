@@ -1,11 +1,11 @@
 管理员用户管理页的每个用户项
 
 <template>
-  <div class="page">
+  <div>
       <el-col>
     <el-row :gutter="10">
       <el-col :span="24">
-        <div class="bigFont gridCommon">
+        <div class="commonFont gridCommon">
             <el-row>
             <el-col :span="4" class="unimportantFontColor">
             <el-avatar :size="size" :src="icon"></el-avatar>
@@ -17,10 +17,11 @@
                   <span>{{userData.username}}</span>
                   </el-col>
                 <el-col :span="6" class="unimportantFontColor">状态：
-                    <span>{{userData.status}}</span>
+                    <span>{{getStatusName(userData.status)}}</span>
                 </el-col>
                 <el-col :span="4" >
-                    <el-button  :disabled="this.userData.status== -1" type="danger" @click="this.OnRemoveBtnClick">删除</el-button>
+                    <el-button v-show="this.userData.status!=-1"  :disabled="this.userData.status== -1" type="danger" @click="this.OnRemoveBtnClick">删除</el-button>
+                    <el-button v-show="this.userData.status==-1"  type="primary" @click="this.OnRecoverBtnClick">恢复</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -51,9 +52,20 @@ export default {
   },
 
   methods: {
+    getStatusName(statusCode){
+      switch (statusCode){
+        case -1:return "已删除";
+        case 0:return "未激活";
+        case 1:return "已激活";
+        default:return "undefined"
+      }
+    },
     OnRemoveBtnClick(){
         this.$emit("deleteUser",this.userData);
       },
+    OnRecoverBtnClick(){
+
+    }
   }
 }
 </script>

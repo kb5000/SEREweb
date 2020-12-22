@@ -13,11 +13,11 @@
     <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px" style="width=800px">
       <el-row :gutter="15">
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="formData.username" placeholder="请输入用户名" clearable :style="{width: '70%'}">
+          <el-input v-model="formData.username" placeholder="小于18位的汉字、英文字母、数字、下划线组合" clearable :style="{width: '70%'}">
           </el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="formData.password" placeholder="请输入密码" :maxlength="18" clearable show-password
+          <el-input v-model="formData.password" placeholder="6-18位" :maxlength="18" clearable show-password
             :style="{width: '70%'}"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="password_confirm">
@@ -29,7 +29,7 @@
             :style="{width: '70%'}"></el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="phone">
-          <el-input v-model="formData.phone" placeholder="请输入手机号" clearable :style="{width: '70%'}">
+          <el-input v-model="formData.phone" placeholder="11位手机号码" clearable :style="{width: '70%'}">
           </el-input>
         </el-form-item>
       </el-row>
