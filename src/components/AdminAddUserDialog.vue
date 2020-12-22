@@ -1,8 +1,8 @@
 增加一个用户的时候出现的页面
 
 <template>
-  <div class="gridCommon">
-    <el-dialog v-bind="$attrs" v-on="$listeners" @open="onOpen" @close="onClose" title="增加用户" :visible.sync="Visible">
+  <div>
+    <el-dialog v-bind="$attrs" v-on="$listeners" @open="onOpen" @close="onClose" title="增加一个用户" :visible.sync="Visible">
       <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
         <el-row :gutter="15">
           <el-form-item label="用户名" prop="username">
@@ -83,6 +83,9 @@ export default {
   created() {},
   mounted() {},
   methods: {
+    open(){
+      this.Visible = true;
+    },
     onOpen() {},
     onClose() {
       this.$refs['elForm'].resetFields()

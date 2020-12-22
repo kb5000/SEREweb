@@ -1,13 +1,16 @@
 <template>
   <div class="gridCommon">
+    <el-container style="text-align:center;display: flex;
+        align-items: center;
+        justify-content: center;">
     <el-header :style="{'font-size':'30px','text-align':'center'}">
       注册
     </el-header>
         <el-divider></el-divider>
-        <el-main style="text-align:center;width:60% display: flex;
+    <el-main style="text-align:center; display: flex;
         align-items: center;
         justify-content: center;">
-    <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
+    <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px" style="width=800px">
       <el-row :gutter="15">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="formData.username" placeholder="请输入用户名" clearable :style="{width: '70%'}">
@@ -35,6 +38,7 @@
       </el-form-item>
     </el-form>
         </el-main>
+    </el-container>
   </div>
 </template>
 <script>

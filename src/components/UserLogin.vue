@@ -1,11 +1,13 @@
 <template>
   <div class="gridCommon">
-    <el-container :style="{'text-align':'center'}">
+    <el-container :style="{'text-align':'center'}" style="text-align:center;display: flex;
+        align-items: center;
+        justify-content: center;">
     <el-header :style="{ 'font-size': '30px', 'text-align': 'center' }">
       登录
     </el-header>
     <el-divider></el-divider>
-    <el-main  style="text-align:center;width:60% display: flex;
+    <el-main  style="text-align:center;  display: flex;
         align-items: center;
         justify-content: center;">
       <el-form
@@ -21,7 +23,7 @@
               v-model="formData.username"
               placeholder="请输入用户名"
               clearable
-              :style="{ width: '70%'}"
+              :style="{ width: '90%'}"
             >
             </el-input>
           </el-form-item>
@@ -32,12 +34,12 @@
               :maxlength="18"
               clearable
               show-password
-              :style="{ width: '70%' }"
+              :style="{ width: '90%' }"
             ></el-input>
           </el-form-item>
           <el-row :style="{'margin-top':'30px'}">
             <el-checkbox :style="{ float: 'left' }" v-model="rememberMe"
-              >记住我（请只在自己的电脑上勾选）</el-checkbox
+              >记住我</el-checkbox
             >
             <el-link
               :style="{ float: 'right' }"

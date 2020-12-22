@@ -1,11 +1,13 @@
 <template>
   <div class="gridCommon">
-    <el-container>
+    <el-container style="text-align:center;display: flex;
+        align-items: center;
+        justify-content: center;">
     <el-header :style="{'font-size':'30px','text-align':'center'}">
       密码重置
     </el-header>
     <el-divider></el-divider>
-    <el-main style="text-align:center;width:60% display: flex;
+    <el-main style="text-align:center; display: flex;
         align-items: center;
         justify-content: center;">
     <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px" style="width=60%;">

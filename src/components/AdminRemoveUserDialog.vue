@@ -2,8 +2,8 @@
 
 <template>
   <div>
-    <el-dialog v-bind="$attrs" v-on="$listeners" @open="onOpen" @close="onClose" title="删除用户" :visible.sync="Visible">
-          <el-row :gutter="10">
+    <el-dialog v-bind="$attrs" v-on="$listeners" @open="onOpen" @close="onClose" title="删除用户" :visible.sync="rmVisible">
+    <el-row :gutter="10">
       <el-col :span="8">
         <div class="bigFont gridCommon titleGrid">
           <div style="text-align: center;">
@@ -14,7 +14,7 @@
       </el-col>
             <el-col :span="16">
         <div class="bigFont gridCommon">
-          基本信息
+          用户信息
           <el-divider></el-divider>
           <el-row>
             <el-col span="8">
@@ -29,10 +29,9 @@
               用户名
             </el-col>
             <el-col span="8">
-              <span>{{this.username}}</span>
+              <span>{{username}}</span>
             </el-col>
             <el-col span="8">  
-              <el-button circle class="positionRight" icon="el-icon-edit" type="primary" @click="changeUsername"></el-button>
             </el-col>
           </el-row>
           <el-row>
@@ -40,10 +39,9 @@
               手机号
             </el-col>
             <el-col span="8">
-              <span>{{this.phone}}</span>     
+              <span>{{phone}}</span>     
             </el-col>         
             <el-col span="8">
-              <el-button circle class="positionRight" icon="el-icon-edit" type="primary" @click="changePhone"></el-button>
             </el-col>
           </el-row>
           <el-row>
@@ -51,18 +49,9 @@
               邮箱
             </el-col>
             <el-col span="8">
-              <span>{{this.email}}</span>
+              <span>{{email}}</span>
             </el-col>
             <el-col span="8">              
-              <el-button circle class="positionRight" icon="el-icon-edit" type="primary" @click="changeEmail"></el-button>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col span="8">
-              密码
-            </el-col>
-            <el-col span="16">
-              <el-button type="primary" @click="changePassword">修改密码</el-button>
             </el-col>
           </el-row>
         </div>
@@ -79,14 +68,14 @@
 export default {
   inheritAttrs: false,
   components: {},
-  props: ['userData'],
+  props: ['userDatas'],
   data() {
     return {
-        Visible:false,
-        username: undefined,
-        password: undefined,
-        password_confirm: undefined,
-        email: undefined,
+        rmVisible:false,
+        uid:0,
+        username:"",
+        email:"",
+        phone:""
   
     }
   },
@@ -95,6 +84,13 @@ export default {
   created() {},
   mounted() {},
   methods: {
+    open(userData){
+        this.uid = userData.uid;
+        this.username = userData.username;
+        this.email = userData.email;
+        this.phone = userData.phone;
+
+    },
     onOpen() {
     },
     onClose() {
@@ -114,5 +110,9 @@ export default {
 }
 
 </script>
+
+
 <style>
 </style>
+
+

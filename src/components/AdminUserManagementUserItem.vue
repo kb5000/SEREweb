@@ -19,14 +19,14 @@
                 <el-col :span="6" class="unimportantFontColor">状态：
                     <span>{{userData.status}}</span>
                 </el-col>
+                <el-col :span="4" >
+                    <el-button  :disabled="this.userData.status== -1" type="danger" @click="this.OnRemoveBtnClick">删除</el-button>
+                </el-col>
             </el-row>
         </div>
         </el-col>
     </el-row>
       </el-col>
-    <el-col>
-        <el-button  :disabled="this.userData.status== -1" type="danger" @click="this.OnRemoveBtnClick">删除</el-button>
-    </el-col>
   </div>
 </template>
 
@@ -52,7 +52,7 @@ export default {
 
   methods: {
     OnRemoveBtnClick(){
-        this.$emit("deleteUser");
+        this.$emit("deleteUser",this.userData);
       },
   }
 }
