@@ -9,6 +9,7 @@ import StudentHomework from './components/StudentHomework'
 import StudentIndex from './components/StudentIndex'
 import StudentScoreHomework from './components/StudentScoreHomework'
 import StudentTest from './components/StudentTest'
+import StudentTestDetail from "./components/StudentTestDetail.vue"
 import TeacherAddClass from './components/TeacherAddClass'
 import TeacherCourseDetail from './components/TeacherCourseDetail'
 import TeacherCourseList from './components/TeacherCourseList'
@@ -33,6 +34,7 @@ export default [
   {path: '/StudentIndex', component: StudentIndex},
   {path: '/StudentScoreHomework', component: StudentScoreHomework},
   {path: '/StudentTest', component: StudentTest},
+  {path: '/StudentTestDetail', component: StudentTestDetail},
   {path: '/TeacherAddClass', component: TeacherAddClass},
   {path: '/TeacherCourseDetail', component: TeacherCourseDetail},
   {path: '/TeacherCourseList', component: TeacherCourseList},
