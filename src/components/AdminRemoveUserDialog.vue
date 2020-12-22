@@ -1,8 +1,9 @@
-个人信息页
+删除用户的时候出现的对话框
 
 <template>
-  <div class="page">
-    <el-row :gutter="10">
+  <div>
+    <el-dialog v-bind="$attrs" v-on="$listeners" @open="onOpen" @close="onClose" title="删除用户" :visible.sync="Visible">
+          <el-row :gutter="10">
       <el-col :span="8">
         <div class="bigFont gridCommon titleGrid">
           <div style="text-align: center;">
@@ -67,83 +68,51 @@
         </div>
       </el-col>
     </el-row>
-
+      <div slot="footer">
+        <el-button @click="close">取消</el-button>
+        <el-button type="danger" @click="handleConfirm">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
-
-
-
-
 <script>
-import axios from 'axios';
-
 export default {
-  name: 'UserInfo',
+  inheritAttrs: false,
+  components: {},
+  props: ['userData'],
   data() {
     return {
-      uid:0,
-      icon:"https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-      username:"?????",
-      email:"3111111111@zju.edu.cn",
-      phone:"18888888888",
+        Visible:false,
+        username: undefined,
+        password: undefined,
+        password_confirm: undefined,
+        email: undefined,
+  
     }
   },
-
-  mounted() {
-  },
-
+  computed: {},
+  watch: {},
+  created() {},
+  mounted() {},
   methods: {
-    changeIcon(){
-
+    onOpen() {
     },
-    changeUsername(){
-
+    onClose() {
+      this.$refs['elForm'].resetFields()
     },
-    changePhone(){
-
+    close() {
+      this.onClose();
+      this.Visible=false;
     },
-    changeEmail(){
-
+    handleConfirm() {
+      this.$refs['elForm'].validate(valid => {
+        if (!valid) return
+        this.close()
+      })
     },
-    changePassword(){
-      this.$router.push('/User/ResetPassword/EmailVerify');
-    },
-
-    getQueryVariable(variable) {
-      var query = window.location.search.substring(1);
-      var vars = query.split("&");
-      for (var i=0;i<vars.length;i++) {
-              var pair = vars[i].split("=");
-              if(pair[0] == variable){return pair[1];}
-      }
-      return false;
-    },
-
-    onPostButtonClick() {
-      axios({
-        method: 'get',
-        url: '/api?method=add'
-      });
-    },
-
   }
 }
+
 </script>
-
-<style scoped>
-.postContentTextBox {
-  width: calc(100% - 6px);
-  height: 100px;
-  border: 1px solid;
-  border-radius: 3px;
-  border-color: #006b6d;
-  padding: 2px;
-  font-size: 1.2em;
-  resize: vertical;
-}
-
-.positionRight {
- float: right;
-                margin-right: 25px;
-}
+<style>
 </style>

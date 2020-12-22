@@ -5,6 +5,7 @@
     <a class="navButton" :href="index">ZJUTA</a>
     <a class="navButtonSmall" :href="courseList">班级</a>
     <a class="navButtonSmall" :href="forum">社区</a>
+    <a class="navButtonSmall" :href="login">登录</a>
     <a class="navButtonSmall positionRight" :href="user">个人中心</a>
   </div>
 </template>
@@ -17,7 +18,9 @@ export default {
       index: "/",
       courseList: "/StudentCourseList",
       forum: "/ForumList",
-      user: "/UserInfo",
+      user: "/User/Info",
+      register:"/User/Register",
+      login:"/User/Login"
     }
   },
 
