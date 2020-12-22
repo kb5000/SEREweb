@@ -13,6 +13,7 @@ import StudentHomework from './components/StudentHomework'
 import StudentIndex from './components/StudentIndex'
 import StudentScoreHomework from './components/StudentScoreHomework'
 import StudentTest from './components/StudentTest'
+import StudentTestDetail from "./components/StudentTestDetail.vue"
 import TeacherAddClass from './components/TeacherAddClass'
 import TeacherCourseDetail from './components/TeacherCourseDetail'
 import TeacherCourseList from './components/TeacherCourseList'
@@ -22,10 +23,15 @@ import TeacherScoreHomework from './components/TeacherScoreHomework'
 import TeacherScoreTest from './components/TeacherScoreTest'
 import TeacherSendAnnouncement from './components/TeacherSendAnnouncement'
 import UserInfo from './components/UserInfo'
+
 import UserLogin  from './components/UserLogin'
 import UserRegister from './components/UserRegister'
 import UserResetPassword from './components/UserResetPassword'
 import UserResetPasswordEmailVerify from './components/UserResetPasswordEmailVerify'
+
+
+import TeacherAddHomework from './components/TeacherAddHomework'
+import TeacherAddTest from './components/TeacherAddTest'
 
 
 export default [
@@ -43,6 +49,7 @@ export default [
   {path: '/StudentIndex', component: StudentIndex},
   {path: '/StudentScoreHomework', component: StudentScoreHomework},
   {path: '/StudentTest', component: StudentTest},
+  {path: '/StudentTestDetail', component: StudentTestDetail},
   {path: '/TeacherAddClass', component: TeacherAddClass},
   {path: '/TeacherCourseDetail', component: TeacherCourseDetail},
   {path: '/TeacherCourseList', component: TeacherCourseList},
@@ -53,9 +60,14 @@ export default [
   {path: '/TeacherSendAnnouncement', component: TeacherSendAnnouncement},
 
 
+
   {path: '/User/Info', component: UserInfo},
   {path: '/User/Login', component: UserLogin},
   {path: '/User/Register', component: UserRegister},
   {path: '/User/ResetPassword', component: UserResetPassword},
   {path: '/User/ResetPassword/EmailVerify', component: UserResetPasswordEmailVerify},
+
+  {path: '/TeacherAddHomework', component: TeacherAddHomework},
+  {path: '/TeacherAddTest', component: TeacherAddTest},
+
 ]

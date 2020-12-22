@@ -3,13 +3,13 @@
 
 <template>
   <div class="page">
-    <div class="head">
-
-    </div>
-    <div class="content">
-    </div>
-    <div class="tail">
-
+    <div class="gridCommon">
+      <span class="bigFont">发布通知<br/></span>
+      <br/>
+      <textarea class="mainTextArea"></textarea>
+      <div style="height: 40px; margin: 10px 0; position: relative;">
+        <div class="commonButton" style="position: absolute; right: 0px;">发布</div>
+      </div>
     </div>
   </div>
 </template>
@@ -50,11 +50,14 @@ export default {
 </script>
 
 <style scoped>
-.page {
-  position: relative;
-  width: 80%;
-  left: 10%;
-  background-color: white;
+.mainTextArea {
+  width: calc(100% - 6px);
+  height: 100px;
+  border: 1px solid;
+  border-radius: 3px;
+  border-color: #006b6d;
+  padding: 2px;
+  font-size: 1.2em;
+  resize: vertical;
 }
-
 </style>
