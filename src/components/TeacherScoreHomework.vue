@@ -11,13 +11,29 @@
             v-on:current-change="changeActivateHomework"
           >
             <el-table-column prop="name"></el-table-column>
-            <el-table-column prop="date"></el-table-column>
+            <el-table-column prop="no"></el-table-column>
           </el-table>
         </div>
       </el-col>
       <el-col :span="18">
         <div class="marginCommon gridCommon" style="height: 530px">
-          <div></div>
+          <span v-if="this.homeworkObj !== null">
+            <div class="bigFont">
+              <span class="stressFontColor">{{homeworkObj.name}}</span>的作业
+            </div>
+            <div style="margin: 20px 0; height: 30px; position: relative;">
+              提交日期：{{homeworkObj.date}} 
+              <span v-if="isHomeworkTimeout(homeworkObj.date, due).timeout" style="color: red;">
+                (超时{{isHomeworkTimeout(homeworkObj.date, due).time}}天)</span>
+              <div class="commonButton" style="display: inline-block; margin: 0 10px;">下载</div>
+            </div>
+            得分：<input v-model="currentScore" type="number" min="0" max="100"/><br/><br/>
+            评语：<br/><br/>
+            <textarea class="mainTextArea"></textarea>
+            <div style="height: 40px; margin: 10px 0; position: relative;">
+              <div class="commonButton" style="position: absolute; right: 0px;">提交</div>
+            </div>
+          </span>
         </div>
       </el-col>
     </el-row>
@@ -34,17 +50,20 @@ export default {
       title: "",
       homeworks: [],
       activeHomework: 0,
-      homeworkObj: undefined,
+      homeworkObj: null,
+      due: "",
+      currentScore: 0,
     }
   },
 
   mounted() {
     this.title = "软需一班作业二"
     this.homeworks = [
-      {id: 1, name: "张三", url: "/", text: "2345458", date: "2020/12/01"},
-      {id: 2, name: "李四", url: "/", text: "2345458", date: "2020/12/01"},
-      {id: 3, name: "王五", url: "/", text: "2345458", date: "2020/12/01"},
+      {id: 1, name: "张三", url: "/", text: "2345458", date: "2020/12/01", no: "3180100000"},
+      {id: 2, name: "李四", url: "/", text: "2345458", date: "2020/12/02", no: "3180100000"},
+      {id: 3, name: "王五", url: "/", text: "2345458", date: "2020/12/03", no: "3180100000"},
     ]
+    this.due = "2020/12/02";
     this.activeHomework = 1;
     this.homeworkObj = null;
   },
@@ -63,6 +82,7 @@ export default {
     changeActivateHomework(current) {
       this.activeHomework = current.id;
       this.homeworkObj = this.getHomeworkObj(current.id);
+      // console.log(this.homeworkObj)
     },
 
     getHomeworkObj(id) {
@@ -70,6 +90,13 @@ export default {
         if (i.id === id) return i;
       }
       return null;
+    },
+
+    isHomeworkTimeout(date, due) {
+      let dateD = new Date(date);
+      let dueD = new Date(due);
+      let millis = dueD.getTime() - dateD.getTime();
+      return {timeout: millis < 0, time: parseInt(-millis / 86400000)};
     },
 
     onPostButtonClick() {
@@ -85,6 +112,15 @@ export default {
 </script>
 
 <style scoped>
-
+.mainTextArea {
+  width: calc(100% - 6px);
+  height: 100px;
+  border: 1px solid;
+  border-radius: 3px;
+  border-color: #006b6d;
+  padding: 2px;
+  font-size: 1.2em;
+  resize: vertical;
+}
 
 </style>

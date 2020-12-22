@@ -7,6 +7,13 @@ module.exports = {
                 pathRewrite: {
                     "^/api": "/"
                 }
+            },
+            "/data": {
+                target: "http://47.103.30.42:15157/",
+                changeOrigin: true,
+                pathRewrite: {
+                    "^/data": "/"
+                }
             }
         }
     }

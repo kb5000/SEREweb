@@ -18,6 +18,8 @@ import TeacherScoreHomework from './components/TeacherScoreHomework'
 import TeacherScoreTest from './components/TeacherScoreTest'
 import TeacherSendAnnouncement from './components/TeacherSendAnnouncement'
 import UserInfo from './components/UserInfo'
+import TeacherAddHomework from './components/TeacherAddHomework'
+import TeacherAddTest from './components/TeacherAddTest'
 
 export default [
   {path: '/', component: index},
@@ -40,4 +42,6 @@ export default [
   {path: '/TeacherScoreTest', component: TeacherScoreTest},
   {path: '/TeacherSendAnnouncement', component: TeacherSendAnnouncement},
   {path: '/UserInfo', component: UserInfo},
+  {path: '/TeacherAddHomework', component: TeacherAddHomework},
+  {path: '/TeacherAddTest', component: TeacherAddTest},
 ]
