@@ -9,7 +9,7 @@ module.exports = {
                 }
             },
             "/data": {
-                target: "http://47.103.30.42:15157/",
+                target: "http://47.103.30.42:15156/",
                 changeOrigin: true,
                 pathRewrite: {
                     "^/data": "/"

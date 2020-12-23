@@ -31,6 +31,7 @@
         style="position: relative; left: 70px; top: -20px; width: 400px"
         drag
         action="/data/"
+        :on-success="dataUploadSuccess"
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -71,6 +72,11 @@ export default {
         }
       }
       return false;
+    },
+
+    dataUploadSuccess(response) {
+      // response is the file name, we can access it by /data/xxx
+      console.log(response)
     },
 
     onPostButtonClick() {
