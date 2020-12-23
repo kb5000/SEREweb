@@ -1,6 +1,7 @@
 import index from './components/index'
 import ForumExplore from './components/ForumExplore'
 import AdminPage from './components/AdminPage'
+import AdminUserManagementPage from './components/AdminUserManagementPage'
 import ForumDetail from './components/ForumDetail'
 import ForumList from './components/ForumList'
 import StudentCourseDetail from './components/StudentCourseDetail'
@@ -19,13 +20,22 @@ import TeacherScoreHomework from './components/TeacherScoreHomework'
 import TeacherScoreTest from './components/TeacherScoreTest'
 import TeacherSendAnnouncement from './components/TeacherSendAnnouncement'
 import UserInfo from './components/UserInfo'
+
+import UserLogin  from './components/UserLogin'
+import UserRegister from './components/UserRegister'
+import UserResetPassword from './components/UserResetPassword'
+import UserResetPasswordEmailVerify from './components/UserResetPasswordEmailVerify'
+
+
 import TeacherAddHomework from './components/TeacherAddHomework'
 import TeacherAddTest from './components/TeacherAddTest'
 
+
 export default [
   {path: '/', component: index},
-  {path: '/ForumExplore', component: ForumExplore},
   {path: '/AdminPage', component: AdminPage},
+  {path:'/AdminPageUserManagement',component:AdminUserManagementPage},
+  {path: '/ForumExplore', component: ForumExplore},
   {path: '/ForumDetail', component: ForumDetail},
   {path: '/ForumList', component: ForumList},
   {path: '/StudentCourseDetail', component: StudentCourseDetail},
@@ -43,7 +53,16 @@ export default [
   {path: '/TeacherScoreHomework', component: TeacherScoreHomework},
   {path: '/TeacherScoreTest', component: TeacherScoreTest},
   {path: '/TeacherSendAnnouncement', component: TeacherSendAnnouncement},
+
+
+
   {path: '/UserInfo', component: UserInfo},
+  {path: '/UserLogin', component: UserLogin},
+  {path: '/UserRegister', component: UserRegister},
+  {path: '/UserResetPassword', component: UserResetPassword},
+  {path: '/UserResetPasswordEmailVerify', component: UserResetPasswordEmailVerify},
+
   {path: '/TeacherAddHomework', component: TeacherAddHomework},
   {path: '/TeacherAddTest', component: TeacherAddTest},
+
 ]
