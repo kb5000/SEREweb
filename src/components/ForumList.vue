@@ -45,14 +45,16 @@ export default {
   },
 
   mounted() {
-    this.forums = [
-      {id: 1, name: "软工需1班", posts: 10000, date: "2020/12/11"},
-      {id: 2, name: "软工需2班", posts: 10, date: "2020/12/11"},
-    ];
-    this.replies = [
-      {id: 1, user: "MgSO4", post: "Main函数为什么不能调用", content: "栈指针乱飞，把内存都搞乱了吧", userLink: "/", postLink: "/"},
-      {id: 2, user: "Ksssss", post: "Main函数为什么不能调用", content: "可能是第9行错了", userLink: "/", postLink: "/"},
-    ];
+    // this.forums = [
+    //   {id: 1, name: "软工需1班", posts: 10000, date: "2020/12/11"},
+    //   {id: 2, name: "软工需2班", posts: 10, date: "2020/12/11"},
+    // ];
+    // this.replies = [
+    //   {id: 1, user: "MgSO4", post: "Main函数为什么不能调用", content: "栈指针乱飞，把内存都搞乱了吧", userLink: "/", postLink: "/"},
+    //   {id: 2, user: "Ksssss", post: "Main函数为什么不能调用", content: "可能是第9行错了", userLink: "/", postLink: "/"},
+    // ];
+
+    axios.post('/api', "method=get&key=forum.plates")
   },
 
   methods: {

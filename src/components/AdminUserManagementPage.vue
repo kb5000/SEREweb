@@ -11,14 +11,10 @@
       "
     >
       <div class="gridCommon">
-        <el-header>
-          当前系统中的注册用户
-          <el-button type="primary" @click="this.OnAddUserButtonClick"
-            >添加用户</el-button
-          >
-          <el-button type="primary" @click="this.OnAddUserButtonClick"
-            >批量导入用户</el-button
-          >
+        <el-header style="padding: 0 10px">
+          <!-- 当前系统中的注册用户 -->
+          <el-button type="primary" @click="this.OnAddUserButtonClick" style="margin: 10px;">添加用户</el-button>
+          <el-button type="primary" @click="this.OnAddMultipleUserButtonClick">批量导入用户</el-button>
         </el-header>
         <el-divider></el-divider>
         <el-main
@@ -30,13 +26,14 @@
           "
         >
           <el-col>
-            <admin-add-user-dialog ref="addDlg"></admin-add-user-dialog>
-            <admin-remove-user-dialog ref="removeDlg"></admin-remove-user-dialog>
-            <div v-for="i in users" :key="i.id" class="marginCommon normalFont">
+            <admin-add-user-dialog ref="addDlg" @update-user="updateUser"></admin-add-user-dialog>
+            <admin-remove-user-dialog ref="removeDlg" @update-user="updateUser"></admin-remove-user-dialog>
+            <div v-for="i in users" :key="i.id" class="marginCommon normalFont" style="position: relative; width: 700px;">
               <el-row>
                 <admin-user-management-user-item
                   :userData="i"
-                  @deleteUser="OnRemoveUserButtonClick"
+                  @delete-user="OnRemoveUserButtonClick"
+                  @recover-user="OnRecoverUserButtonClick(i)"
                 ></admin-user-management-user-item>
               </el-row>
             </div>
@@ -64,6 +61,7 @@ export default {
     return {
       vi: false,
       users: [],
+      defaultImg: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
     };
   },
 
@@ -98,6 +96,8 @@ export default {
         phone: "????",
       },
     ];
+
+    this.updateUser()
   },
 
   methods: {
@@ -108,6 +108,31 @@ export default {
 
     OnAddUserButtonClick() {
       this.$refs["addDlg"].Visible = true;
+    },
+
+    OnAddMultipleUserButtonClick() {
+      this.$refs["addDlg"].Visible = true;
+    },
+
+    OnRecoverUserButtonClick(user) {
+      axios.post('/api', "method=setj&key=user." + user.uid + ".status&val=1").then(this.updateUser);
+    },
+
+    updateUser() {
+      axios.post('/api', "method=get&key=user").then((res) => {
+        this.users = []
+        for (let k in res.data) {
+          let i = res.data[k];
+          this.users.push({
+            uid: i.id,
+            username: i.name,
+            icon: typeof(i.img) === 'undefined' ? this.defaultImg : i.img,
+            status: typeof(i.status) === 'undefined' ? 1 : i.status,
+            email: i.email,
+            phone: i.phone
+          })
+        }
+      })
     },
 
     getQueryVariable(variable) {

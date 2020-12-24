@@ -6,14 +6,38 @@
 
 <template>
   <div class="page">
-    <div class="head">
-
-    </div>
-    <div class="content">
-
+    <div class="head"></div>
+    <div class="gridCommon" style="background-color: white">
+      <!-- <el-row>
+  <el-button>默认按钮</el-button>
+  <el-button type="primary">主要按钮</el-button>
+  <el-button type="success">成功按钮</el-button>
+  <el-button type="info">信息按钮</el-button>
+  <el-button type="warning">警告按钮</el-button>
+  <el-button type="danger">危险按钮</el-button>
+</el-row> -->
+      <el-row gutter:="20">
+        <el-col span:="4">
+          <el-button type="text" @click="clickButton(1)">添加课程</el-button>
+        </el-col>
+        <el-col span:="4">
+          <el-button type="text" @click="clickButton(2)">删除课程</el-button>
+        </el-col>
+        <el-col span:="4">
+          <el-button type="text" @click="clickButton(3)">学生管理</el-button>
+        </el-col>
+        <el-col span:="4">
+          <el-button type="text" @click="clickButton(4)">设置教师角色</el-button>
+        </el-col>
+        <el-col span:="4">
+          <el-button type="text" @click="clickButton(5)">设置助教角色</el-button>
+        </el-col>
+        <el-col span:="4">
+          <el-button type="text" @click="clickButton(6)">发布通知</el-button>
+        </el-col>
+      </el-row>      
     </div>
     <div class="tail">
-
     </div>
   </div>
 </template>
@@ -25,6 +49,7 @@ export default {
   name: 'AdminPage',
   data() {
     return {
+      addCourse: "/AdminAddCourse",
     }
   },
 
@@ -41,7 +66,6 @@ export default {
       }
       return false;
     },
-
     onPostButtonClick() {
       axios({
         method: 'get',
@@ -49,17 +73,23 @@ export default {
       });
     },
 
+    clickButton(num) {
+      switch (num) {
+        case 1: this.$router.push("/AdminAddCourse"); break;
+        case 2: this.$router.push("/AdminDeleteCourse"); break;
+        case 3: this.$router.push("/AdminCourseStudentManagement"); break;
+        case 4: this.$router.push("/AdminSetTeacherRole"); break;
+        case 5: this.$router.push("/AdminSetTARole"); break;
+        case 6: this.$router.push("/AdminReleaseNotice"); break;
+      }
+    }
+
   }
 }
 </script>
 
 <style scoped>
-.page {
-  position: relative;
-  width: 80%;
-  left: 10%;
-  background-color: white;
-}
+
 
 
 </style>

@@ -31,13 +31,16 @@
                         <el-table-column prop="uid" label="学工号" width="180">
                         </el-table-column>
                         <el-table-column prop="" label="操作">
-                          <el-button
-                            style="float: right; padding: 2px 0; color: red"
-                            type="text"
-                            icon="el-icon-delete"
-                            circle
-                          >
-                          </el-button>
+                          <template slot-scope="scope">
+                            <el-button
+                              style="float: right; padding: 2px 0; color: red"
+                              type="text"
+                              icon="el-icon-delete"
+                              circle
+                              @click.native.prevent="deleteRow(scope.$index, studentsOfGroup[i.id])"
+                            >
+                            </el-button>
+                          </template>
                         </el-table-column>
                       </el-table>
                     </el-col>
@@ -130,6 +133,10 @@ export default {
         method: "get",
         url: "/api?method=add",
       });
+    },
+
+    deleteRow(index, rows) {
+      rows.splice(index, 1);
     },
 
     onPlusButtonClick(id) {

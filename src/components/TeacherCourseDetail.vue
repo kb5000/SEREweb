@@ -4,11 +4,14 @@
 
 <template>
   <div class="page">
-    <div class="head">
-    </div>
+    <div class="head"></div>
     <div class="content">
       <el-row :gutter="10" class="gridCommon">
-        <el-row><el-col :span="24" class="bigFont">{{courseName}} 课程简介</el-col></el-row>
+        <el-row
+          ><el-col :span="24" class="bigFont"
+            >{{ courseName }} 课程简介</el-col
+          ></el-row
+        >
         <el-row class="cardWrap">
           <el-input
             type="textarea"
@@ -20,12 +23,16 @@
         ></el-row>
         <el-row class="cardWrap">
           <el-col :span="4">
-            <el-image
-              :src="courseImg"
-              style="width: 100px; height: 100px"
-              :fit="fill"
+            <el-upload
+              class="avatar-uploader"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload"
             >
-            </el-image>
+              <img v-if="courseImg" :src="courseImg" class="avatar" />
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
           </el-col>
           <el-col :span="20">
             <el-button style="float: right; padding: 3px 0" type="success">
@@ -37,7 +44,9 @@
       <el-row :gutter="10" class="gridCommon">
         <el-col :span="24">
           <el-row>
-            <el-col :span="8" class="bigFont">管理 {{courseName}} 课程资源</el-col>
+            <el-col :span="8" class="bigFont"
+              >管理 {{ courseName }} 课程资源</el-col
+            >
             <el-col :span="16">
               <el-select
                 v-model="condition"
@@ -104,6 +113,7 @@
                   style="float: right; padding: 3px 0"
                   type="text"
                   icon="el-icon-plus"
+                  @click="dialogVisibleFile = true"
                 >
                   添加文件
                 </el-button>
@@ -146,7 +156,7 @@
                                 type="text"
                                 icon="el-icon-plus"
                                 circle
-                                @click="dialogVisible = true"
+                                @click="dialogVisibleClassDeliver = true"
                                 >添加分发班级
                               </el-button>
                             </el-dropdown-item>
@@ -193,57 +203,80 @@
         </el-col>
       </el-row>
     </div>
-    <el-dialog title="添加分发班级" :visible.sync="dialogVisible">
+    <el-dialog title="添加分发班级" :visible.sync="dialogVisibleClassDeliver">
       <el-row class="gridCommon">
         <span class="normalFont"
           >为 {{ filesForCourse[selectClassId].name }} 添加要分发的班级</span
         >
+        <div v-for="i in classes" :key="i.id">
+          <el-row gutter="5" class="gridSmall">
+            <el-col :span="4">{{ i.name }}</el-col>
+            <el-col :span="4">{{ i.time }}</el-col>
+            <el-col :span="4">学生：{{ i.stuNum }}人</el-col>
+            <el-col :span="5">
+              教师：
+              <el-dropdown>
+                <span class="el-dropdown-link">
+                  {{ teachersOfClass[i.id][0].name }}
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <div v-for="k in teachersOfClass[i.id]" :key="k.id">
+                    <el-dropdown-item>{{ k.name }}</el-dropdown-item>
+                  </div>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-col>
+            <el-col :span="5">
+              助教：
+              <el-dropdown>
+                <span class="el-dropdown-link">
+                  {{ assitantsOfClass[i.id][0].name }}
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <div v-for="k in assitantsOfClass[i.id]" :key="k.id">
+                    <el-dropdown-item>{{ k.name }}</el-dropdown-item>
+                  </div>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-col>
+            <el-col :span="2">
+              <el-checkbox v-model="i.checked" style="float: right"
+                >选择</el-checkbox
+              >
+            </el-col>
+          </el-row>
+        </div>
+      </el-row>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisibleClassDeliver = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisibleClassDeliver = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
+    <el-dialog title="资源管理" :visible.sync="dialogVisibleFile">
+      <el-row class="gridCommon">
+        <span class="normalFont">为 {{ courseName }} 添加文件</span>
         <el-row>
-          <div v-for="i in classes" :key="i.id">
-            <el-row gutter="5" class="gridSmall">
-              <el-col :span="4">{{ i.name }}</el-col>
-              <el-col :span="4">{{ i.time }}</el-col>
-              <el-col :span="4">学生：{{ i.stuNum }}人</el-col>
-              <el-col :span="5">
-                教师：
-                <el-dropdown>
-                  <span class="el-dropdown-link">
-                    {{ teachersOfClass[i.id][0].name }}
-                    <i class="el-icon-arrow-down el-icon--right"></i>
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <div v-for="k in teachersOfClass[i.id]" :key="k.id">
-                      <el-dropdown-item>{{ k.name }}</el-dropdown-item>
-                    </div>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </el-col>
-              <el-col :span="5">
-                助教：
-                <el-dropdown>
-                  <span class="el-dropdown-link">
-                    {{ assitantsOfClass[i.id][0].name }}
-                    <i class="el-icon-arrow-down el-icon--right"></i>
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <div v-for="k in assitantsOfClass[i.id]" :key="k.id">
-                      <el-dropdown-item>{{ k.name }}</el-dropdown-item>
-                    </div>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </el-col>
-              <el-col :span="2">
-                <el-checkbox v-model="i.checked" style="float: right"
-                  >选择</el-checkbox
-                >
-              </el-col>
-            </el-row>
-          </div>
+          <el-table :data="files" height="200" border style="width: 100%">
+            <el-table-column prop="" label="选择" width="50" type="selection">
+            </el-table-column>
+            <el-table-column prop="name" label="文件名" width="180">
+            </el-table-column>
+            <el-table-column prop="size" label="大小"> </el-table-column>
+          </el-table>
+        </el-row>
+        <el-row>
+          <el-upload action="https://jsonplaceholder.typicode.com/posts/">
+            <el-button type="text" icon="el-icon-plus">上传本地文件</el-button>
+          </el-upload>
         </el-row>
       </el-row>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
+        <el-button @click="dialogVisibleFile = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisibleFile = false"
           >确 定</el-button
         >
       </span>
@@ -272,28 +305,37 @@ export default {
       courseInfo: "好课啊好课！",
       courseImg:
         "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
+      uploadFile: "",
       selectClassId: 0,
+      dialogVisibleClassDeliver: false,
+      dialogVisibleFile: false,
     };
   },
 
   mounted() {
     this.courseName = "微积分（甲）1";
-      (this.classes = [
-        {
-          id: 0,
-          name: "周一678",
-          time: "2020-2021秋冬",
-          stuNum: 42,
-          checked: false,
-        },
-        {
-          id: 1,
-          name: "周三345",
-          time: "2020-2021秋冬",
-          stuNum: 35,
-          checked: false,
-        },
-      ]);
+    this.classes = [
+      {
+        id: 0,
+        name: "周一678",
+        time: "2020-2021秋冬",
+        stuNum: 42,
+        checked: false,
+      },
+      {
+        id: 1,
+        name: "周三345",
+        time: "2020-2021秋冬",
+        stuNum: 35,
+        checked: false,
+      },
+    ];
+    this.files = [
+      { id: 0, name: "ch1.pdf", size: "1MB", checked: false },
+      { id: 1, name: "ch2.pdf", size: "2KB", checked: false },
+      { id: 2, name: "ch3.pdf", size: "1MB", checked: false },
+      { id: 3, name: "ch4.pdf", size: "2KB", checked: false },
+    ];
     this.teachersOfClass = [
       [
         { id: 0, name: "许可越" },
@@ -350,6 +392,23 @@ export default {
         url: "/api?method=add",
       });
     },
+
+    handleAvatarSuccess(res, file) {
+      this.courseImg = URL.createObjectURL(file.raw);
+    },
+
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
   },
 };
 </script>
@@ -380,5 +439,28 @@ export default {
   padding: 10px;
   background-color: white;
   font-size: 16px;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 100px;
+  height: 100px;
+  display: block;
 }
 </style>

@@ -5,14 +5,20 @@
     <a class="navButton" :href="index">ZJUTA</a>
     <a class="navButtonSmall" :href="courseList">班级</a>
     <a class="navButtonSmall" :href="forum">社区</a>
-    <a class="navButtonSmall" :href="login">登录</a>
-    <a class="navButtonSmall positionRight" :href="user">个人中心</a>
+    <a class="navButtonSmall positionRight" :href="login" v-if="logged === false">登录</a>
+    <a class="navButtonSmall positionRight" :href="user" v-else>个人中心</a>
   </div>
 </template>
 
 <script>
+import cookies from 'js-cookie'
+import axios from 'axios'
+
 export default {
   name: 'navigation',
+  stores: {
+    logged: 'state.logged'
+  },
   data() {
     return {
       index: "/",
@@ -25,7 +31,17 @@ export default {
   },
 
   mounted() {
-
+    // console.log(this.logged)
+    let user = cookies.get('user');
+    if (typeof(user) !== 'undefined') {
+      this.logged = true;
+      axios.post('/api', "method=get&key=user." + user).then(res => {
+        this.loggedUser = res.data;
+        // console.log(this.loggedUser)
+      })
+    } else {
+      this.logged = false;
+    }
   },
 
   methods: {

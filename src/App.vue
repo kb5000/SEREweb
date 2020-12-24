@@ -3,9 +3,7 @@
       <navigation />
       <el-container>
         <el-main id="MainContent">
-          <keep-alive>
             <router-view></router-view>
-          </keep-alive>
         </el-main>
       </el-container>
   </div>
@@ -19,6 +17,8 @@ export default {
   name: 'App',
   components: {
     navigation
+  },
+  mounted() {
   }
 }
 </script>

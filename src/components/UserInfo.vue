@@ -72,6 +72,11 @@
               <el-button type="primary" @click="changePassword">修改密码</el-button>
             </el-col>
           </el-row>
+          <el-row class="info-row">
+            <el-col span="24">
+              <el-button type="primary" @click="exitLogin">退出登录</el-button>
+            </el-col>
+          </el-row>
         </div>
       </el-col>
     </el-row>
@@ -97,9 +102,14 @@
 
 <script>
 import axios from 'axios';
+import cookies from 'js-cookie'
 
 export default {
   name: 'UserInfo',
+  stores: {
+    logged: 'state.logged',
+    loggedUser: 'state.currentUser'
+  },
   data() {
     return {
       editInput:"",
@@ -115,12 +125,30 @@ export default {
   },
 
   mounted() {
+    // console.log(this.loggedUser)
+    let user = cookies.get('user');
+    this.loggedUser = user;
+    axios.post("/api", "method=get&key=user." + this.loggedUser).then(res => {
+      let user = res.data;
+      this.uid = user.id;
+      this.username = user.name;
+      this.email = user.email;
+      this.phone = user.phone;
+      this.icon = (typeof(user.img) !== 'undefined' ? user.img : "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png")
+    })
   },
 
   methods: {
     openEditInfoDialog(infoKey){
         this.editingKey = infoKey;
         this.editVisible = true;
+    },
+
+    exitLogin() {
+      this.loggedUser = null;
+      this.logged = false;
+      cookies.remove('user');
+      this.$router.push('/UserLogin');
     },
     // updateInfoValue(infoKey,infoValue){
 

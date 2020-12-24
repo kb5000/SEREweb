@@ -18,10 +18,10 @@
         label-width="100px"
       >
         <el-row :gutter="15" >
-          <el-form-item label="用户名" prop="username" :style="{'margin-top':'30px'}">
+          <el-form-item label="学工号" prop="id" :style="{'margin-top':'30px'}">
             <el-input
-              v-model="formData.username"
-              placeholder="请输入用户名"
+              v-model="formData.id"
+              placeholder="请输入学工号"
               clearable
               :style="{ width: '90%'}"
             >
@@ -38,7 +38,7 @@
             ></el-input>
           </el-form-item>
           <el-row :style="{'margin-top':'30px'}">
-            <el-checkbox :style="{ float: 'left' }" v-model="rememberMe"
+            <el-checkbox :style="{ float: 'left' , left: '50px'}" v-model="rememberMe"
               >记住我</el-checkbox
             >
             <el-link
@@ -50,7 +50,7 @@
           </el-row>
         </el-row >
         <el-form-item size="large" style="margin-top:30px;text-align:center">
-          <el-button type="primary" @click="login">登录</el-button>
+          <el-button type="primary" @click="login" style="position: relative; left: -30px;">登录</el-button>
           <el-button @click="goToRegisterPage">去注册</el-button>
         </el-form-item>
       </el-form>
@@ -59,21 +59,28 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
+import cookies from 'js-cookie'
+
 export default {
   components: {},
   props: [],
+  stores: {
+    logged: 'state.logged',
+    loggedUser: 'state.currentUser'
+  },
   data() {
     return {
       rememberMe: false,
       formData: {
-        username: undefined,
-        password: undefined,
+        id: "",
+        password: "",
       },
       rules: {
-        username: [
+        id: [
           {
             required: true,
-            message: "请输入用户名",
+            message: "请输入学工号",
             trigger: "blur",
           },
         ],
@@ -98,7 +105,24 @@ export default {
     login() {
       this.$refs["elForm"].validate((valid) => {
         if (!valid) return;
-        // TODO 提交表单
+        axios.post('/api', "method=get&key=user." + this.formData.id + '.password').then(res => {
+          if (res.data === null || res.data !== this.formData.password) {
+            this.$message.error("学工号或密码不正确");
+          } else {
+            this.$message.success("登录成功");
+            if (this.rememberMe) {
+              cookies.set('user', this.formData.id, {SameSite: "Strict", expires: 7});
+            } else {
+              cookies.set('user', this.formData.id, {SameSite: "Strict"});
+            }
+            this.logged = true;
+            axios.post('/api', "method=get&key=user." + this.formData.id).then(res => {
+              this.loggedUser = res.data;
+              // console.log(this.loggedUser)
+            })
+            this.$router.push('/');
+          }
+        })
       });
     },
     resetForm() {

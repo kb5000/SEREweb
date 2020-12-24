@@ -12,7 +12,11 @@
         justify-content: center;">
     <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px" style="width=800px">
       <el-row :gutter="15">
-        <el-form-item label="用户名" prop="username">
+        <el-form-item label="学工号" prop="id">
+          <el-input v-model="formData.id" placeholder="小于10位数字" clearable :style="{width: '70%'}">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="姓名" prop="username">
           <el-input v-model="formData.username" placeholder="小于18位的汉字、英文字母、数字、下划线组合" clearable :style="{width: '70%'}">
           </el-input>
         </el-form-item>
@@ -42,22 +46,30 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
+
 export default {
   components: {},
   props: [],
   data() {
     return {
       formData: {
-        username: undefined,
-        password: undefined,
-        password_confirm: undefined,
-        email: undefined,
-        phone: undefined,
+        id: null,
+        username: null,
+        password: null,
+        password_confirm: null,
+        email: null,
+        phone: null,
       },
       rules: {
+        id: [{
+          required: true,
+          message: '请输入学工号',
+          trigger: 'blur'
+        }],
         username: [{
           required: true,
-          message: '请输入用户名',
+          message: '请输入姓名',
           trigger: 'blur'
         }],
         password: [{
@@ -90,7 +102,28 @@ export default {
   methods: {
     submitForm() {
       this.$refs['elForm'].validate(valid => {
-        if (!valid) return
+        if (!valid) return false;
+        let user = {
+          id: this.formData.id,
+          name: this.formData.username,
+          password: this.formData.password,
+          email: this.formData.email,
+          phone: this.formData.phone,
+          state: 1,
+        }
+        axios.post('/api', 'method=get&key=user.' + this.formData.id).then(res => {
+          if (res.data !== null) {
+            this.$message.error('学工号已存在')
+          } else {
+            axios.post('/api', 
+              "method=setj&key=user." + this.formData.id + "&val=" + encodeURIComponent(JSON.stringify(user)))
+              .then(() => {
+                this.$emit("update-user");
+              })
+            this.$message('注册成功，请登录')
+            this.$router.push({path: '/UserLogin'})
+          }
+        })
         // TODO 提交表单
       })
     },
@@ -99,11 +132,6 @@ export default {
 
 </script>
 <style scoped>
-.page {
-  position: relative;
-  width: 80%;
-  left: 10%;
-  background-color: white;
-}
+
 
 </style>

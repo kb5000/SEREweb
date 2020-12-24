@@ -2,10 +2,10 @@
 添加一个班级，也可以为班级指定一个课程
 
 <template>
-  <div class="page">
+  <div>
     <div class="head"></div>
-    <div class="content">
-      <el-row :gutter="10" class="gridCommon">
+    <div class="gridCommon">
+      <el-row :gutter="0" class="">
         <el-row
           ><el-col :span="24" class="bigFont"
             >{{ courseName }} 班级信息</el-col
@@ -50,13 +50,18 @@
                     <el-table-column prop="uid" label="学工号" width="180">
                     </el-table-column>
                     <el-table-column prop="" label="操作">
-                      <el-button
-                        style="float: right; padding: 2px 0; color: red"
-                        type="text"
-                        icon="el-icon-delete"
-                        circle
-                      >
-                      </el-button>
+                      <template slot-scope="scope">
+                        <el-button
+                          style="float: right; padding: 2px 0; color: red"
+                          type="text"
+                          icon="el-icon-delete"
+                          circle
+                          @click.native.prevent="
+                            deleteRow(scope.$index, form.teachers)
+                          "
+                        >
+                        </el-button>
+                      </template>
                     </el-table-column> </el-table
                 ></el-row>
                 <el-row>
@@ -91,13 +96,18 @@
                     <el-table-column prop="uid" label="学工号" width="180">
                     </el-table-column>
                     <el-table-column prop="" label="操作">
-                      <el-button
-                        style="float: right; padding: 2px 0; color: red"
-                        type="text"
-                        icon="el-icon-delete"
-                        circle
-                      >
-                      </el-button>
+                      <template slot-scope="scope">
+                        <el-button
+                          style="float: right; padding: 2px 0; color: red"
+                          type="text"
+                          icon="el-icon-delete"
+                          circle
+                          @click.native.prevent="
+                            deleteRow(scope.$index, form.assitants)
+                          "
+                        >
+                        </el-button>
+                      </template>
                     </el-table-column> </el-table
                 ></el-row>
                 <el-row>
@@ -132,13 +142,18 @@
                     <el-table-column prop="uid" label="学工号" width="180">
                     </el-table-column>
                     <el-table-column prop="" label="操作">
-                      <el-button
-                        style="float: right; padding: 2px 0; color: red"
-                        type="text"
-                        icon="el-icon-delete"
-                        circle
-                      >
-                      </el-button>
+                      <template slot-scope="scope">
+                        <el-button
+                          style="float: right; padding: 2px 0; color: red"
+                          type="text"
+                          icon="el-icon-delete"
+                          circle
+                          @click.native.prevent="
+                            deleteRow(scope.$index, form.students)
+                          "
+                        >
+                        </el-button>
+                      </template>
                     </el-table-column> </el-table
                 ></el-row>
                 <el-row>
@@ -241,6 +256,10 @@ export default {
       });
     },
 
+    deleteRow(index, rows) {
+      rows.splice(index, 1);
+    },
+
     onPlusButtonClick(groupType) {
       if (groupType == 0) {
         this.inputTeacher.name = "new";
@@ -252,13 +271,13 @@ export default {
         this.inputAssistant.name = "new";
         this.inputAssistant.id = this.form.assitants.length;
         let isnerted = JSON.parse(JSON.stringify(this.inputAssistant));
-        this.form.teachers.push(isnerted);
+        this.form.assitants.push(isnerted);
         this.inputAssistant.uid = "";
       } else if (groupType == 2) {
         this.inputStudent.name = "new";
         this.inputStudent.id = this.form.students.length;
         let isnerted = JSON.parse(JSON.stringify(this.inputStudent));
-        this.form.teachers.push(isnerted);
+        this.form.students.push(isnerted);
         this.inputStudent.uid = "";
       }
     },
@@ -267,12 +286,7 @@ export default {
 </script>
 
 <style scoped>
-.page {
-  position: relative;
-  width: 80%;
-  left: 10%;
-  background-color: white;
-}
+
 .cardWrap {
   margin: 2px;
   padding: 10px;

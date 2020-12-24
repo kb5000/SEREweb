@@ -10,10 +10,10 @@
             <el-col :span="4" class="unimportantFontColor">
             <el-avatar :size="size" :src="icon"></el-avatar>
             </el-col>
-              <el-col :span="4" class="unimportantFontColor">uid：
+              <el-col :span="4" class="unimportantFontColor">学工号：
                   <span>{{userData.uid}}</span>
                   </el-col>
-              <el-col :span="6" class="unimportantFontColor">用户名：
+              <el-col :span="6" class="unimportantFontColor">姓名：
                   <span>{{userData.username}}</span>
                   </el-col>
                 <el-col :span="6" class="unimportantFontColor">状态：
@@ -21,7 +21,7 @@
                 </el-col>
                 <el-col :span="4" >
                     <el-button v-show="this.userData.status!=-1"  :disabled="this.userData.status== -1" type="danger" @click="this.OnRemoveBtnClick">删除</el-button>
-                    <el-button v-show="this.userData.status==-1"  type="primary" @click="this.OnRecoverBtnClick">恢复</el-button>
+                    <el-button v-show="this.userData.status==-1"  type="primary" @click="this.OnRecoverBtnClick" style="position: relative; left: -5px;">恢复</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -61,10 +61,12 @@ export default {
       }
     },
     OnRemoveBtnClick(){
-        this.$emit("deleteUser",this.userData);
-      },
+      this.$emit("delete-user",this.userData);
+      // this.close();
+    },
     OnRecoverBtnClick(){
-
+      this.$emit("recover-user",this.userData);
+      // this.close();
     }
   }
 }

@@ -26,6 +26,12 @@ import UserRegister from './components/UserRegister'
 import UserResetPassword from './components/UserResetPassword'
 import UserResetPasswordEmailVerify from './components/UserResetPasswordEmailVerify'
 
+import AdminAddCourse from './components/AdminAddCourse'
+import AdminCourseStudentManagement from './components/AdminCourseStudentManagement'
+import AdminDeleteCourse from './components/AdminDeleteCourse'
+import AdminReleaseNotice from './components/AdminReleaseNotice'
+import AdminSetTARole from './components/AdminSetTARole'
+import AdminSetTeacherRole from './components/AdminSetTeacherRole'
 
 import TeacherAddHomework from './components/TeacherAddHomework'
 import TeacherAddTest from './components/TeacherAddTest'
@@ -34,7 +40,7 @@ import TeacherAddTest from './components/TeacherAddTest'
 export default [
   {path: '/', component: index},
   {path: '/AdminPage', component: AdminPage},
-  {path:'/AdminPageUserManagement',component:AdminUserManagementPage},
+  {path: '/AdminPageUserManagement', component:AdminUserManagementPage},
   {path: '/ForumExplore', component: ForumExplore},
   {path: '/ForumDetail', component: ForumDetail},
   {path: '/ForumList', component: ForumList},
@@ -54,7 +60,12 @@ export default [
   {path: '/TeacherScoreTest', component: TeacherScoreTest},
   {path: '/TeacherSendAnnouncement', component: TeacherSendAnnouncement},
 
-
+  {path: '/AdminAddCourse', component: AdminAddCourse},
+  {path: '/AdminCourseStudentManagement', component: AdminCourseStudentManagement},
+  {path: '/AdminDeleteCourse', component:AdminDeleteCourse},
+  {path: '/AdminReleaseNotice', component:AdminReleaseNotice},
+  {path: '/AdminSetTARole', component: AdminSetTARole},
+  {path: '/AdminSetTeacherRole', component: AdminSetTeacherRole},
 
   {path: '/UserInfo', component: UserInfo},
   {path: '/UserLogin', component: UserLogin},

@@ -21,8 +21,19 @@
       <br/><br/>
     </div>
     <div class="gridCommon marginCommon">
-      <div v-for="(i, index) in questions" :key="i.id" class="marginCommon">
-        <div>{{index}}. </div>
+      <div v-for="(i, index) in questions" :key="index" class="marginCommon">
+        <div style="position: relative">
+          <p style="display: inline-block; vertical-align: top; position: relative; top: 2px;">{{index + 1}}. </p>
+          <div class="el-icon-delete" style="position: absolute; left: -3px; top: 48px; cursor: pointer;" @click="removeQuestionClick(index)"></div>
+          <div style="display: inline-block; vertical-align: top; margin: 0 10px;">
+            <p class="normalFont">{{i.description + "（" + i.score + "分）"}}</p>
+            <img v-if="i.img !== ''" :src="i.img" />
+            <div v-if="i.type === 0">
+              <p v-for="(j, jndex) in i.options" :key="jndex">{{String.fromCharCode(jndex + 65) + ". " + j}}</p>
+            </div>
+            <p v-if="i.type !== 2"><span class="stressFontColor">答案：</span>{{i.type === 0 ? String.fromCharCode(i.answer + 65) : i.answer}}</p>
+          </div>
+        </div>
       </div>
       <div class="marginCommon">
         <p class="bigFont">添加题目</p>
@@ -44,8 +55,8 @@
         题目图片：
         <el-upload
           style="position: relative; left: 70px; top: -20px; width: 400px;"
-          drag
-          action="/data/"
+          drag :limit="1" :on-success="imgUploadSuccess"
+          action="/data/" :file-list="fileList"
         >
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
@@ -100,6 +111,7 @@ export default {
       currentAnswer: "",
       currentOptions: [],
       currentImg: "",
+      fileList: [],
       questionMetaList: [
         {label: "选择题", value: 0},
         {label: "填空题", value: 1},
@@ -127,6 +139,10 @@ export default {
       return false;
     },
 
+    imgUploadSuccess(name) {
+      this.currentImg = '/data/' + name;
+    },
+
     addQuestion() {
       let question = {
         type: this.currentType,
@@ -137,10 +153,23 @@ export default {
         img: this.currentImg
       };
       this.questions.push(question);
+      this.currentImg = "";
+      this.currentDescription = "";
+      this.currentScore = 0;
+      this.currentAnswer = "",
+      this.currentOptions = []
+      this.fileList = []
     },
 
     addOptionClick() {
       this.currentOptions.push("");
+    },
+
+    removeQuestionClick(index) {
+      for (let i = index; i < this.questions.length - 1; i++) {
+        this.questions[i] = this.questions[i + 1];
+      }
+      this.questions.pop();
     },
 
     removeOptionClick(index) {

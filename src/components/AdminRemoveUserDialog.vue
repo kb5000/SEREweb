@@ -18,7 +18,7 @@
           <el-divider></el-divider>
           <el-row>
             <el-col span="8">
-              uid
+              学工号
             </el-col>
             <el-col span="16">
               <span>{{this.uid}}</span>
@@ -26,7 +26,7 @@
           </el-row>
           <el-row>
             <el-col span="8">
-              用户名
+              姓名
             </el-col>
             <el-col span="16">
               <span>{{username}}</span>
@@ -70,6 +70,8 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
+
 export default {
   inheritAttrs: false,
   components: {},
@@ -104,14 +106,18 @@ export default {
       this.$refs['elForm'].resetFields()
     },
     close() {
-      this.onClose();
-      this.Visible=false;
+      this.rmVisible=false;
+      // this.onClose();
     },
     handleConfirm() {
-      this.$refs['elForm'].validate(valid => {
-        if (!valid) return
-        this.close()
+      axios.post('/api', "method=setj&key=user." + this.uid + ".status&val=-1").then(() => {
+        this.$emit("update-user");
+        this.close();
       })
+      // this.$refs['elForm'].validate(valid => {
+      //   if (!valid);
+      //   this.close()
+      // })V
     },
   }
 }
