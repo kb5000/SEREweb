@@ -87,7 +87,7 @@
                       教师：
                       <el-dropdown>
                         <span class="el-dropdown-link">
-                          {{ j.teacher[0].name }}
+                          {{ j.teacher.length === 0 ? "" : j.teacher[0].name }}
                           <i class="el-icon-arrow-down el-icon--right"></i>
                         </span>
                         <el-dropdown-menu slot="dropdown">
@@ -104,7 +104,7 @@
                       助教：
                       <el-dropdown>
                         <span class="el-dropdown-link">
-                          {{ j.ta[0].name }}
+                          {{ j.ta.length === 0 ? "" : j.ta[0].name }}
                           <i class="el-icon-arrow-down el-icon--right"></i>
                         </span>
                         <el-dropdown-menu slot="dropdown">
