@@ -88,7 +88,7 @@
         <div class="commonButton" style="position: relative; width: 30px; left: 65px;" @click="addQuestion">添加</div>
       </div>
       <br/>
-      <div class="commonButton" style="position: relative; left: calc(50% - 15px); width: 30px;">提交</div>
+      <div class="commonButton" style="position: relative; left: calc(50% - 15px); width: 30px;" @click="onPostButtonClick">提交</div>
     </div>
   </div>
 </template>
@@ -100,6 +100,7 @@ export default {
   name: 'TeacherAddTest',
   data() {
     return {
+      classID: "",
       className: "",
       testName: "",
       startTime: null,
@@ -126,6 +127,10 @@ export default {
       "选项A",
       "选项B",
     ];
+    this.classID = this.getQueryVariable('class');
+    axios.post("/api", 'method=get&key=class.' + this.classID).then(res => {
+      this.className = res.data.name;
+    })
   },
 
   methods: {
@@ -140,7 +145,7 @@ export default {
     },
 
     imgUploadSuccess(name) {
-      this.currentImg = '/data/' + name;
+      this.currentImg = name;
     },
 
     addQuestion() {
@@ -181,10 +186,18 @@ export default {
     },
 
     onPostButtonClick() {
-      axios({
-        method: 'get',
-        url: '/api?method=add'
-      });
+      let id = this.$uuid.v4();
+      axios.post('/api', 'method=setj&key=class.' + this.classID + '.test.' + id + '&val=' + 
+        encodeURIComponent(JSON.stringify({
+          id: id,
+          name: this.testName,
+          startTime: this.startTime,
+          quizTime: this.quizTime,
+          questions: this.questions
+        }))).then(() => {
+          this.$message.success("布置成功");
+          setTimeout(() => {this.$router.go(-1)}, 500)
+        })
     },
 
   },

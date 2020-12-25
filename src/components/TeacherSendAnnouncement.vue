@@ -6,9 +6,9 @@
     <div class="gridCommon">
       <span class="bigFont">发布通知<br/></span>
       <br/>
-      <textarea class="mainTextArea"></textarea>
+      <textarea class="mainTextArea" v-model="dat"></textarea>
       <div style="height: 40px; margin: 10px 0; position: relative;">
-        <div class="commonButton" style="position: absolute; right: 0px;">发布</div>
+        <div class="commonButton" style="position: absolute; right: 0px;" @click="onPostButtonClick">发布</div>
       </div>
     </div>
   </div>
@@ -21,6 +21,7 @@ export default {
   name: 'TeacherSendAnnouncement',
   data() {
     return {
+      dat: ''
     }
   },
 
@@ -39,10 +40,16 @@ export default {
     },
 
     onPostButtonClick() {
-      axios({
-        method: 'get',
-        url: '/api?method=add'
-      });
+      axios.post('/api', 'method=get&key=class.' + this.getQueryVariable('class') + '.announcement').then(res => {
+        let ann = []
+        if (res.data !== null) ann = res.data;
+        ann.push({time: new Date().toLocaleString(), content: this.dat});
+        axios.post('/api', 'method=setj&key=class.' + this.getQueryVariable('class') + '.announcement&val=' + 
+          encodeURIComponent(JSON.stringify(ann))).then(() => {
+            this.$message.success("发布成功");
+            setTimeout(() => {this.$router.go(-1)}, 500)
+          })
+      })
     },
 
   }

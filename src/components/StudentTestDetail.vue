@@ -76,7 +76,22 @@ export default {
         {id: 1, submitTime: "2020-12-20 12:00", score: "90"},
         {id: 2, submitTime: "2020-12-20 12:30", score: "100"},
       ];
-      this.testLink = "/StudentTest";
+      this.testLink = "/StudentTest?class=" + this.getQueryVariable('class') + "&test=" + this.getQueryVariable('test');
+
+      axios.post('/api', 'method=get&key=class.' + this.getQueryVariable('class') + '.test.' + this.getQueryVariable('test')).then(res => {
+        this.testName = res.data.name;
+        this.title = res.data.name;
+        this.myTest = []
+        for (let i in res.data.submits) {
+          let o = res.data.submits[i]
+          this.myTest.push({
+            id: o.id,
+            submitTime: new Date(o.time).toLocaleString(),
+            score: o.score
+          })
+        }
+      })
+
   },
 
   methods: {

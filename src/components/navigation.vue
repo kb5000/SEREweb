@@ -1,10 +1,11 @@
 导航栏页
 
 <template>
-  <div class="mainNav">
+  <div class="mainNav" style="position: relative">
     <a class="navButton" :href="index">ZJUTA</a>
     <a class="navButtonSmall" :href="courseList">班级</a>
     <a class="navButtonSmall" :href="forum">社区</a>
+    <a class="navButtonSmall" style="position: absolute; right: 240px; top: 14px;" href="/TeacherCourseList">教师版</a>
     <a class="navButtonSmall positionRight" :href="login" v-if="logged === false">登录</a>
     <a class="navButtonSmall positionRight" :href="user" v-else>个人中心</a>
   </div>

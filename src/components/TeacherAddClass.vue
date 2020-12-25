@@ -228,12 +228,47 @@ export default {
       { value: "2019-2020春夏", label: "2019-2020春夏" },
       { value: "2019-2020秋冬", label: "2019-2020秋冬" },
     ];
-    this.form.teachers = [{ id: 0, name: "许可越", uid: "3180101000" }];
-    this.form.assitants = [{ id: 0, name: "a", uid: "3180101111" }];
-    this.form.students = [{ id: 0, name: "潘凯航", uid: "3180101222" }];
+    // this.form.teachers = [{ id: 0, name: "许可越", uid: "3180101000" }];
+    // this.form.assitants = [{ id: 0, name: "a", uid: "3180101111" }];
+    // this.form.students = [{ id: 0, name: "潘凯航", uid: "3180101222" }];
     this.inputTeacher = { id: 0, name: "", uid: "" };
     this.inputAssistant = { id: 0, name: "", uid: "" };
     this.inputStudent = { id: 0, name: "", uid: "" };
+
+    axios.post('/api', 'method=get&key=course.' + this.getQueryVariable('id')).then(res => {
+      this.courseName = res.data.name;
+      axios.post('/api', 'method=get&key=user.' + res.data.teacher).then(t => {
+        this.form.teachers.push({id: 0,uid: t.data.id, name: t.data.name})
+        if (this.getQueryVariable('class') !== null) {
+          axios.post('/api', 'method=get&key=class.' + this.getQueryVariable('class')).then(t => {
+            this.form.name = t.data.name;
+            this.form.time = t.data.time;
+            for (let i in t.data.teacher) {
+              if (i === this.form.teachers[0].uid) continue;
+              this.form.teachers.push({
+                id: 0,
+                uid: i,
+                name: t.data.teacher[i]
+              })
+            }
+            for (let i in t.data.ta) {
+              this.form.assitants.push({
+                id: 0,
+                uid: i,
+                name: t.data.ta[i]
+              })
+            }
+            for (let i in t.data.student) {
+              this.form.students.push({
+                id: 0,
+                uid: i,
+                name: t.data.student[i]
+              })
+            }
+          })
+        }
+      })
+    })
   },
 
   methods: {
@@ -246,7 +281,39 @@ export default {
           return pair[1];
         }
       }
-      return false;
+      return null;
+    },
+
+    onSubmit() {
+      let classData = {
+        id: this.$uuid.v4(),
+        name: this.form.name,
+        time: this.form.time,
+        course: this.getQueryVariable('id'),
+        teacher: {},
+        ta: {},
+        student: {}
+      };
+      for (let i of this.form.teachers) {
+        classData.teacher[i.uid] = i.name;
+      }
+      for (let i of this.form.assitants) {
+        classData.ta[i.uid] = i.name;
+      }
+      for (let i of this.form.students) {
+        classData.student[i.uid] = i.name;
+      }
+      axios.post('/api', 'method=get&key=class').then(res => {
+        for (let i in res.data) {
+          if (res.data[i].name === classData.name && res.data[i].course === classData.course) {
+            classData.id = i;
+          }
+        }
+        axios.post('/api', 'method=setj&key=class.' + classData.id + '&val=' + encodeURIComponent(JSON.stringify(classData))).then(() => {
+          this.$message.success("更新/创建成功");
+          setTimeout(() => {this.$router.go(-1)}, 500)
+        })
+      })
     },
 
     onPostButtonClick() {
@@ -257,28 +324,50 @@ export default {
     },
 
     deleteRow(index, rows) {
+      if (rows == this.form.teachers && index === 0) {
+        this.$message.error("不能删除管理教师");
+        return;
+      }
       rows.splice(index, 1);
     },
 
     onPlusButtonClick(groupType) {
       if (groupType == 0) {
-        this.inputTeacher.name = "new";
-        this.inputTeacher.id = this.form.teachers.length;
-        let isnerted = JSON.parse(JSON.stringify(this.inputTeacher));
-        this.form.teachers.push(isnerted);
-        this.inputTeacher.uid = "";
+        axios.post('/api', 'method=get&key=user.' + this.inputTeacher.uid).then(res => {
+          if (res.data === null) {
+            this.$message.error("该用户不存在");
+            return;
+          } else {
+            this.inputTeacher.name = res.data.name;
+            let isnerted = JSON.parse(JSON.stringify(this.inputTeacher));
+            this.form.teachers.push(isnerted);
+            this.inputTeacher.uid = "";
+          }
+        })
       } else if (groupType == 1) {
-        this.inputAssistant.name = "new";
-        this.inputAssistant.id = this.form.assitants.length;
-        let isnerted = JSON.parse(JSON.stringify(this.inputAssistant));
-        this.form.assitants.push(isnerted);
-        this.inputAssistant.uid = "";
+        axios.post('/api', 'method=get&key=user.' + this.inputAssistant.uid).then(res => {
+          if (res.data === null) {
+            this.$message.error("该用户不存在");
+            return;
+          } else {
+            this.inputAssistant.name = res.data.name;
+            let isnerted = JSON.parse(JSON.stringify(this.inputAssistant));
+            this.form.assitants.push(isnerted);
+            this.inputAssistant.uid = "";
+          }
+        })
       } else if (groupType == 2) {
-        this.inputStudent.name = "new";
-        this.inputStudent.id = this.form.students.length;
-        let isnerted = JSON.parse(JSON.stringify(this.inputStudent));
-        this.form.students.push(isnerted);
-        this.inputStudent.uid = "";
+        axios.post('/api', 'method=get&key=user.' + this.inputStudent.uid).then(res => {
+          if (res.data === null) {
+            this.$message.error("该用户不存在");
+            return;
+          } else {
+            this.inputStudent.name = res.data.name;
+            let isnerted = JSON.parse(JSON.stringify(this.inputStudent));
+            this.form.students.push(isnerted);
+            this.inputStudent.uid = "";
+          }
+        })
       }
     },
   },

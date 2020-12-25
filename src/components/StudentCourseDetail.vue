@@ -14,8 +14,8 @@
               <div class="marginCommon smallFont gridCommon">
                 <el-row>
                   <el-col :span="4">课程名称：{{courseName}}</el-col>
-                  <el-col :span="4">课程代码：{{courseId}}</el-col>
-                  <el-col :span="4">开课系级：{{courseDepartment}}</el-col>
+                  <el-col :span="4">班级名称：{{className}}</el-col>
+                  <el-col :span="4">专业课：{{courseMajor}}</el-col>
                   <el-col :span="4">学年期：{{courseSession}}</el-col>
                   <el-col :span="4">开始日期：{{courseDate}}</el-col>
                   <el-col :span="4">授课教师：
@@ -54,7 +54,7 @@
                   <el-col :span="4">作业名称：{{i.name}}</el-col>
                   <el-col :span="4">作业形式：{{i.form}}</el-col>
                   <el-col :span="4">状态：{{i.state}}</el-col>
-                  <el-col :span="8">开放时间：{{i.startTime}}-{{i.endTime}}</el-col>
+                  <el-col :span="8">开放时间：{{i.endTime}}</el-col>
                   <el-col :span="2">成绩：{{i.score}}</el-col>
                   <el-col :span="2">
                     <a class="stressFontColor" :href="i.detailLink" style="text-decoration: none; float:right">详情</a>
@@ -69,9 +69,9 @@
               <div v-for="i in courseQuiz" :key="i.id" class="marginCommon smallFont gridCommon">
                 <el-row>
                   <el-col :span="4">测试名称：{{i.name}}</el-col>
-                  <el-col :span="4">题目数量：{{i.questionNumber}}</el-col>
                   <el-col :span="4">状态：{{i.state}}</el-col>
-                  <el-col :span="8">开放时间：{{i.startTime}}-{{i.endTime}}</el-col>
+                  <el-col :span="4">测试时长：{{i.time}}分钟</el-col>
+                  <el-col :span="8">开放时间：{{i.startTime}}</el-col>
                   <el-col :span="2">成绩：{{i.score}}</el-col>
                   <el-col :span="2">
                     <a class="stressFontColor" :href="i.detailLink" style="text-decoration: none; float:right;">详情</a>
@@ -94,9 +94,10 @@ export default {
   data() {
     return {
       courseId:"",
+      className: "",
       courseName:"",
       title:"",
-      courseDepartment:"",
+      courseMajor:"",
       courseDate:"",
       courseSession:"",
       courseTeacher:[],
@@ -108,29 +109,79 @@ export default {
   },
 
   mounted() {
-    this.courseId = "21194584";
-    this.courseName = "软件需求工程";
-    this.title = this.courseName;
-    this.courseDepartment = "软件学院";
-    this.courseSession = "2020-2021 秋冬";
-    this.courseDate = "2020-09-01";
-    this.courseTeacher = [
-      {id: 1, user: "邢卫", userLink: "/"},
-      {id: 2, user: "刘玉生", userLink: "/"},
-    ];
-    this.courseBrief = "哈哈哈哈哈哈哈哈哈哈哈哈哈好多文档哈哈哈哈哈哈哈哈哈";
+    // this.courseId = "21194584";
+    // this.courseName = "软件需求工程";
+    // this.title = this.courseName;
+    // this.courseDepartment = "软件学院";
+    // this.courseSession = "2020-2021 秋冬";
+    // this.courseDate = "2020-09-01";
+    // this.courseTeacher = [
+    //   {id: 1, user: "邢卫", userLink: "/"},
+    //   {id: 2, user: "刘玉生", userLink: "/"},
+    // ];
+    // this.courseBrief = "软件需求工程是最好的一门课！";
     this.courseMaterials = [
       {id: 1, name: "UML课件"},
       {id: 2, name: "需求课件"},
     ];
-    this.courseHomework = [
-      {id: 1, name: "作业一", form: "个人作业", state: "未交", startTime:"2020-12-20 11:30", endTime: "2020-12-25 11:30", score : "0", detailLink : "/StudentHomework"},
-      {id: 2, name: "作业二", form: "个人作业", state: "已交", startTime:"2020-12-20 11:30", endTime: "2020-12-25 11:30", score : "100", detailLink : "/StudentHomework"},
-    ];
-    this.courseQuiz = [
-      {id: 1, name: "测试一", questionNumber: "5", state: "未交", startTime:"2020-12-20 11:30", endTime: "2020-12-25 11:30", score : "0", detailLink : "/StudentTestDetail"},
-      {id: 2, name: "测试二", questionNumber: "10", state: "已交", startTime:"2020-12-20 11:30", endTime: "2020-12-25 11:30", score : "100", detailLink : "/StudentTestDetail"},
-    ];
+    // this.courseHomework = [
+    //   {id: 1, name: "作业一", form: "个人作业", state: "未交", startTime:"2020-12-20 11:30", endTime: "2020-12-25 11:30", score : "0", detailLink : "/StudentHomework"},
+    //   {id: 2, name: "作业二", form: "个人作业", state: "已交", startTime:"2020-12-20 11:30", endTime: "2020-12-25 11:30", score : "100", detailLink : "/StudentHomework"},
+    // ];
+    // this.courseQuiz = [
+    //   {id: 1, name: "测试一", questionNumber: "5", state: "未交", startTime:"2020-12-20 11:30", endTime: "2020-12-25 11:30", score : "0", detailLink : "/StudentTestDetail"},
+    //   {id: 2, name: "测试二", questionNumber: "10", state: "已交", startTime:"2020-12-20 11:30", endTime: "2020-12-25 11:30", score : "100", detailLink : "/StudentTestDetail"},
+    // ];
+
+    let courseID = this.getQueryVariable('id');
+    let classID = this.getQueryVariable('class')
+
+    axios.post('/api', 'method=get&key=course.' + courseID).then(res => {
+      axios.post('/api', 'method=get&key=class.' + classID).then(rec => {
+        let courseData = res.data;
+        let classData = rec.data;
+        this.courseId = courseData.id;
+        this.courseName = courseData.name;
+        this.className = classData.name
+        this.courseMajor = courseData.isMajor ? "专业课" : "通识课"
+        this.courseSession = classData.time;
+        this.courseDate = new Date(courseData.startDate).toLocaleDateString()
+        this.courseTeacher = []
+        for (let i in classData.teacher) {
+          this.courseTeacher.push({
+            id: i,
+            user: classData.teacher[i],
+            userLink: ''
+          })
+        }
+        this.courseBrief = courseData.description;
+        this.title = courseData.name + " " + classData.name
+        for (let i in classData.homework) {
+          let o = classData.homework[i]
+          this.courseHomework.push({
+            id: i,
+            name: o.name,
+            form: o.isGroup ? "分组作业" : "个人作业",
+            state: "未交",
+            endTime: new Date(o.deadline).toLocaleString(),
+            score: '',
+            detailLink: '/StudentHomework?class=' + classID + '&homework=' + i
+          })
+        }
+        for (let i in classData.test) {
+          let o = classData.test[i]
+          this.courseQuiz.push({
+            id: i,
+            name: o.name,
+            time: o.quizTime,
+            state: "未交",
+            startTime: new Date(o.startTime).toLocaleString(),
+            score: '',
+            detailLink: '/StudentTestDetail?class=' + classID + '&test=' + i
+          })
+        }
+      })
+    })
   },
 
   methods: {

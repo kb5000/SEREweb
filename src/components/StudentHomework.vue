@@ -17,6 +17,12 @@
                   <el-col :span="5">截止时间：{{homeworkEndTime}}</el-col>
                   <el-col :span="4">作业形式：{{homeworkForm}}</el-col>
                 </el-row>
+                <!-- <el-row>
+                  <el-col :span="20">{{homeworkContent}}</el-col>
+                  <el-col :span="4">
+                    <div class="myButton" style="float:right;" v-on:click="onDownloadHomeworkButtonClick">下载附件</div>
+                  </el-col>
+                </el-row> -->
               </div> 
             </el-row>
             <el-row class="gridCommon normalFont marginCommon" style="padding: 20px">
@@ -28,16 +34,21 @@
                 </el-row>
               </div> 
             </el-row>
+            <div class="merginCommon gridCommon">
+              <p>{{homeworkContenta}}</p>
+              <div v-if="homeworkData !== null" class="myButton" style="position: relative; width: 50px;" @click="onDownloadHomeworkButtonAClick">下载附件</div>
+            </div>
           </el-tab-pane>
           <el-tab-pane label="我的作业">
             <el-row class="gridCommon normalFont marginCommon" style="padding: 20px">
               我的作业
               <div v-for="i in myHomework" :key="i.id" class="marginCommon smallFont gridCommon">
                 <el-row>
-                  <el-col :span="16">提交时间：{{i.submitTime}}</el-col>
+                  <el-col :span="8">提交时间：{{i.submitTime}}</el-col>
+                  <el-col :span="8">{{i.detail}}</el-col>
                   <el-col :span="4">成绩：{{i.score}}</el-col>
                   <el-col :span="4">
-                    <div class="myButton" style="float:right;" v-on:click="onDownloadButtonClick">下载作业</div>
+                    <div class="myButton" style="float:right;" @click="onDownloadButtonClick(i)">下载作业</div>
                   </el-col>
                 </el-row>
               </div>
@@ -52,9 +63,17 @@
                 </el-row>
                 <el-row>
                   <el-col :span="22">
-                    <div style="height: 24px; position: relative;">
+                    <!-- <div style="height: 24px; position: relative;">
                       <div class="myButton marginCommon" style="float:right;" v-on:click="onUploadButtonClick">上传文件</div>
-                    </div>
+                    </div> -->
+                    <el-upload
+                      style="position: relative;  width: 400px"
+                      action="/data/"
+                      :on-success="dataUploadSuccess"
+                    >
+                      <div class="el-upload__text"><em>点击上传附件</em></div>
+                      <div class="el-upload__tip" slot="tip">只能上传不超过20MB的文件</div>
+                    </el-upload>
                   </el-col>
                   <el-col :span="2">
                     <div style="height: 24px; position: relative;">
@@ -87,6 +106,7 @@
 
 <script>
 import axios from 'axios';
+import cookies from 'js-cookie'
 
 export default {
   name: 'StudentHomework',
@@ -103,7 +123,10 @@ export default {
       homeworkTeacherRatio:"",
       homeworkStudentRatio:"",
       myHomework:[],
+      homeworkContenta: "",
       scoreHomework:[],
+      file: null,
+      homeworkData: null,
     }
   },
 
@@ -117,14 +140,38 @@ export default {
     this.homeworkForm = "个人作业";
     this.homeworkTeacherRatio = "100%";
     this.homeworkStudentRatio = "0%";
-    this.myHomework = [
-      {id: 1, submitTime: "2020-12-20 12:00", score: "90"},
-      {id: 2, submitTime: "2020-12-20 12:30", score: "100"},
-    ];
+    // this.myHomework = [
+    //   {id: 1, submitTime: "2020-12-20 12:00", score: "90"},
+    //   {id: 2, submitTime: "2020-12-20 12:30", score: "100"},
+    // ];
     this.scoreHomework = [
       {id: 1, submitTime: "2020-12-20 12:00", score: "100", scoreLink:"/StudentScoreHomework"},
       {id: 2, submitTime: "2020-12-20 12:30", score: "0", scoreLink:"/StudentScoreHomework"},
     ];
+
+    let classID = this.getQueryVariable('class')
+    let homeworkID = this.getQueryVariable('homework')
+    axios.post('/api', 'method=get&key=class.' + classID).then(res => {
+      let classData = res.data;
+      let homework = classData.homework[homeworkID]
+      this.homeworkName = homework.name;
+      this.title = homework.name
+      this.homeworkEndTime = new Date(homework.deadline).toLocaleString()
+      this.homeworkForm = homework.isGroup ? "分组作业" : "个人作业"
+      this.homeworkContenta = homework.description
+      this.homeworkData = homework.file[0]
+      this.myHomework = []
+      for (let i in homework.submits) {
+        let o = homework.submits[i]
+        this.myHomework.push({
+          id: o.id,
+          submitTime: new Date(o.time).toLocaleString(),
+          score: o.score === null ? "未评分" : o.score,
+          detail: o.content,
+          file: o.file
+        })
+      }
+    })
   },
 
   methods: {
@@ -145,8 +192,16 @@ export default {
       });
     },
 
-    onDownloadButtonClick() {
-      
+    dataUploadSuccess(res) {
+      this.file = res
+    },
+
+    onDownloadHomeworkButtonAClick() {
+      window.open('/data/' + this.homeworkData);
+    },
+
+    onDownloadButtonClick(node) {
+      window.open('/data/' + node.file);
     },
 
     onUploadButtonClick() {
@@ -154,7 +209,19 @@ export default {
     },
 
     onSubmitButtonClick() {
-
+      let toUpload = {
+        id: this.$uuid.v4(),
+        user: cookies.get('user'),
+        file: this.file,
+        content: this.homeworkDescription,
+        time: new Date().toJSON(),
+        score: null
+      }
+      axios.post('/api', 'method=setj&key=class.' + this.getQueryVariable('class') + '.homework.' + this.getQueryVariable('homework') + '.submits.' + toUpload.id + '&val=' + 
+        encodeURIComponent(JSON.stringify(toUpload))).then(() => {
+          this.$message.success("上传成功");
+          // setTimeout(() => {this.$router.go(-1)}, 500)
+        })
     },
 
   }

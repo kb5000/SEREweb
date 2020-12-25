@@ -25,17 +25,16 @@
           <el-col :span="4">
             <el-upload
               class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              action="/data/"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
             >
               <img v-if="courseImg" :src="courseImg" class="avatar" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-col>
           <el-col :span="20">
-            <el-button style="float: right; padding: 3px 0" type="success">
+            <el-button style="float: right; padding: 3px 0" type="success" @click="updateCourseDetail">
               更新课程简介
             </el-button>
           </el-col>
@@ -75,11 +74,11 @@
                     教师：
                     <el-dropdown>
                       <span class="el-dropdown-link">
-                        {{ teachersOfClass[i.id][0].name }}
+                        {{ i.teacher[0].name }}
                         <i class="el-icon-arrow-down el-icon--right"></i>
                       </span>
                       <el-dropdown-menu slot="dropdown">
-                        <div v-for="k in teachersOfClass[i.id]" :key="k.id">
+                        <div v-for="k in i.teacher" :key="k.id">
                           <el-dropdown-item>{{ k.name }}</el-dropdown-item>
                         </div>
                       </el-dropdown-menu>
@@ -89,11 +88,11 @@
                     助教：
                     <el-dropdown>
                       <span class="el-dropdown-link">
-                        {{ assitantsOfClass[i.id][0].name }}
+                        {{ i.ta[0].name }}
                         <i class="el-icon-arrow-down el-icon--right"></i>
                       </span>
                       <el-dropdown-menu slot="dropdown">
-                        <div v-for="k in assitantsOfClass[i.id]" :key="k.id">
+                        <div v-for="k in i.ta" :key="k.id">
                           <el-dropdown-item>{{ k.name }}</el-dropdown-item>
                         </div>
                       </el-dropdown-menu>
@@ -217,11 +216,11 @@
               教师：
               <el-dropdown>
                 <span class="el-dropdown-link">
-                  {{ teachersOfClass[i.id][0].name }}
+                  {{ i.teacher[0].name }}
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <div v-for="k in teachersOfClass[i.id]" :key="k.id">
+                  <div v-for="k in i.teacher" :key="k.id">
                     <el-dropdown-item>{{ k.name }}</el-dropdown-item>
                   </div>
                 </el-dropdown-menu>
@@ -231,11 +230,11 @@
               助教：
               <el-dropdown>
                 <span class="el-dropdown-link">
-                  {{ assitantsOfClass[i.id][0].name }}
+                  {{ i.ta[0].name }}
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <div v-for="k in assitantsOfClass[i.id]" :key="k.id">
+                  <div v-for="k in i.ta" :key="k.id">
                     <el-dropdown-item>{{ k.name }}</el-dropdown-item>
                   </div>
                 </el-dropdown-menu>
@@ -269,7 +268,7 @@
           </el-table>
         </el-row>
         <el-row>
-          <el-upload action="https://jsonplaceholder.typicode.com/posts/">
+          <el-upload action="/data">
             <el-button type="text" icon="el-icon-plus">上传本地文件</el-button>
           </el-upload>
         </el-row>
@@ -314,50 +313,50 @@ export default {
 
   mounted() {
     this.courseName = "微积分（甲）1";
-    this.classes = [
-      {
-        id: 0,
-        name: "周一678",
-        time: "2020-2021秋冬",
-        stuNum: 42,
-        checked: false,
-      },
-      {
-        id: 1,
-        name: "周三345",
-        time: "2020-2021秋冬",
-        stuNum: 35,
-        checked: false,
-      },
-    ];
+    // this.classes = [
+    //   {
+    //     id: 0,
+    //     name: "周一678",
+    //     time: "2020-2021秋冬",
+    //     stuNum: 42,
+    //     checked: false,
+    //   },
+    //   {
+    //     id: 1,
+    //     name: "周三345",
+    //     time: "2020-2021秋冬",
+    //     stuNum: 35,
+    //     checked: false,
+    //   }
+    // ];
     this.files = [
       { id: 0, name: "ch1.pdf", size: "1MB", checked: false },
       { id: 1, name: "ch2.pdf", size: "2KB", checked: false },
       { id: 2, name: "ch3.pdf", size: "1MB", checked: false },
       { id: 3, name: "ch4.pdf", size: "2KB", checked: false },
     ];
-    this.teachersOfClass = [
-      [
-        { id: 0, name: "许可越" },
-        { id: 1, name: "马梓睿" },
-      ],
-      [
-        { id: 0, name: "李保宏" },
-        { id: 1, name: "赖诚" },
-        { id: 2, name: "吉庆雄" },
-      ],
-    ];
-    this.assitantsOfClass = [
-      [
-        { id: 0, name: "a" },
-        { id: 1, name: "b" },
-      ],
-      [
-        { id: 0, name: "c" },
-        { id: 1, name: "d" },
-        { id: 2, name: "e" },
-      ],
-    ];
+    // this.teachersOfClass = [
+    //   [
+    //     { id: 0, name: "许可越" },
+    //     { id: 1, name: "马梓睿" },
+    //   ],
+    //   [
+    //     { id: 0, name: "李保宏" },
+    //     { id: 1, name: "赖诚" },
+    //     { id: 2, name: "吉庆雄" },
+    //   ],
+    // ];
+    // this.assitantsOfClass = [
+    //   [
+    //     { id: 0, name: "a" },
+    //     { id: 1, name: "b" },
+    //   ],
+    //   [
+    //     { id: 0, name: "c" },
+    //     { id: 1, name: "d" },
+    //     { id: 2, name: "e" },
+    //   ],
+    // ];
     this.conditions = [
       { value: "2020-2021秋冬", label: "进行中" },
       { value: "2019-2020春夏", label: "2019-2020春夏" },
@@ -371,6 +370,41 @@ export default {
       [{ id: 0, name: "周三345" }],
       [{ id: 1, name: "周一678" }],
     ];
+
+    axios.post('/api', 'method=get&key=course.' + this.getQueryVariable('id')).then(res => {
+      this.courseName = res.data.name;
+      this.courseInfo = res.data.description;
+      this.courseImg = (typeof(res.data.img) !== 'undefined' ? res.data.img : "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png");
+    })
+
+    axios.post('/api', 'method=get&key=class').then(res => {
+      let courseID = this.getQueryVariable('id');
+        console.log(res);
+      for (let i in res.data) {
+        if (res.data[i].course === courseID) {
+          let j = res.data[i];
+          let arr = []
+          for (let k in j.teacher) {
+            arr.push({id: k, name: j.teacher[k]})
+          }
+          j.teacher = arr;
+          let arr2 = []
+          for (let k in j.ta) {
+            arr2.push({id: k, name: j.ta[k]})
+          }
+          j.ta = arr2;
+          let num = 0;
+          // eslint-disable-next-line no-unused-vars
+          for (let k in j.student) {
+            num++;
+          }
+          j.stuNum = num;
+          j.checked = false;
+          this.classes.push(j)
+        }
+      }
+      console.log(JSON.stringify(this.classes))
+    })
   },
 
   methods: {
@@ -393,8 +427,15 @@ export default {
       });
     },
 
-    handleAvatarSuccess(res, file) {
-      this.courseImg = URL.createObjectURL(file.raw);
+    updateCourseDetail() {
+      axios.post('/api', 'method=set&key=course.' + this.getQueryVariable('id') + '.detail&val=' + encodeURIComponent(this.courseInfo));
+      axios.post('/api', 'method=set&key=course.' + this.getQueryVariable('id') + '.img&val=' + encodeURIComponent(this.courseImg)).then(() => {
+        this.$message.success("更新成功")
+      });
+    },
+
+    handleAvatarSuccess(res) {
+      this.courseImg = '/data/' + res;
     },
 
     beforeAvatarUpload(file) {

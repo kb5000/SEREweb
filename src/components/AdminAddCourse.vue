@@ -8,9 +8,12 @@
   <div class="page">
     <div class="head"></div>
     <div class="gridCommon">
-        <el-form ref="form" :model="form" label-width="80px">
+        <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="课程名称">
             <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="管理教师ID">
+            <el-input v-model="form.teacher"></el-input>
         </el-form-item>
         <!-- <el-form-item label="班级号">
             <el-input v-model="form.id"></el-input>
@@ -57,6 +60,7 @@ import axios from 'axios'
         form: {
           name: '',
           id:'',
+          teacher:'',
           category: '',
           date1: '',
           date2: '',
@@ -76,7 +80,8 @@ import axios from 'axios'
           startDate: this.form.date1,
           endDate: this.form.date2,
           thisMajor: this.form.only,
-          description: this.form.desc
+          description: this.form.desc,
+          teacher: this.form.teacher
         }
         axios.post('/api', 'method=setj&key=course.' + out.id + "&val=" + encodeURIComponent(JSON.stringify(out)))
           .then(() => {

@@ -37,7 +37,7 @@
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <div class="el-upload__tip" slot="tip">只能上传不超过20MB的文件</div>
       </el-upload>
-      <div class="commonButton" style="position: relative; left: 380px; width: 30px;">提交</div>
+      <div class="commonButton" style="position: relative; left: 380px; width: 30px;" @click="onPostButtonClick">提交</div>
     </div>
   </div>
 </template>
@@ -50,15 +50,20 @@ export default {
   data() {
     return {
       className: "软需一班",
+      classID: "",
       homeworkName: "",
       deadline: null,
       homeworkDescription: "",
       isGroup: false,
+      file: [],
     };
   },
 
   mounted() {
-
+    this.classID = this.getQueryVariable('class');
+    axios.post("/api", 'method=get&key=class.' + this.classID).then(res => {
+      this.className = res.data.name;
+    })
   },
 
   methods: {
@@ -77,13 +82,23 @@ export default {
     dataUploadSuccess(response) {
       // response is the file name, we can access it by /data/xxx
       console.log(response)
+      this.file.push(response)
     },
 
     onPostButtonClick() {
-      axios({
-        method: "get",
-        url: "/api?method=add",
-      });
+      let homeworkID = this.$uuid.v4();
+      axios.post('/api', 'method=setj&key=class.' + this.classID + '.homework.' + homeworkID + '&val=' + 
+        encodeURIComponent(JSON.stringify({
+          id: homeworkID,
+          name: this.homeworkName,
+          deadline: this.deadline,
+          description: this.homeworkDescription,
+          isGroup: this.isGroup,
+          file: this.file
+        }))).then(() => {
+          this.$message.success("布置成功");
+          setTimeout(() => {this.$router.go(-1)}, 500)
+        })
     },
   },
 };
