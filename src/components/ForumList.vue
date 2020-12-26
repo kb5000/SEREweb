@@ -8,7 +8,7 @@
       <el-col :span="16">
         <div class="bigFont gridCommon">
           加入的板块
-          <div v-for="i in forums" :key="i.id" class="marginCommon normalFont gridCommon handCursor">
+          <div v-for="i in forums" :key="i.id" class="marginCommon normalFont gridCommon handCursor" @click="goForum(i.id)">
             <el-row>
               <el-col :span="14">{{i.name}}</el-col>
               <el-col :span="4" class="unimportantFontColor">主题数：{{i.posts}}</el-col>
@@ -33,7 +33,7 @@
 
 <script>
 import axios from 'axios';
-
+import cookies from 'js-cookie'
 
 export default {
   name: 'ForumList',
@@ -53,8 +53,30 @@ export default {
     //   {id: 1, user: "MgSO4", post: "Main函数为什么不能调用", content: "栈指针乱飞，把内存都搞乱了吧", userLink: "/", postLink: "/"},
     //   {id: 2, user: "Ksssss", post: "Main函数为什么不能调用", content: "可能是第9行错了", userLink: "/", postLink: "/"},
     // ];
-
-    axios.post('/api', "method=get&key=forum.plates")
+    axios.post('/api', "method=get&key=course").then(courses => {
+      axios.post('/api', "method=get&key=class").then(res => {
+        let user = cookies.get('user')
+        for (let i in res.data) {
+          let o = res.data[i];
+          this.forums.push({
+            id: i,
+            name: courses.data[o.course].name + ' ' + o.name,
+            date: typeof(o.post) !== 'undefined' && o.post.length > 0 ? 
+              new Date(o.post[o.post.length - 1].date).toLocaleString() : "暂无",
+            posts: typeof(o.post) !== 'undefined' && o.post.length > 0 ? 
+              o.post.length : 0
+          })
+          if (typeof(o.post) !== 'undefined') {
+            for (let j of o) {
+              if (j.user === user) {
+                // this.replies.push({id: j.id, user: j.user, post: })
+                console.log(1)
+              }
+            }
+          }
+        }
+      })
+    })
   },
 
   methods: {
@@ -66,6 +88,10 @@ export default {
               if(pair[0] == variable){return pair[1];}
       }
       return false;
+    },
+
+    goForum(id) {
+      this.$router.push("/ForumExplore?class=" + id);
     },
 
     onPostButtonClick() {

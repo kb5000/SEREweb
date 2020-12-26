@@ -80,6 +80,19 @@
               </div>
             </el-row>
           </el-tab-pane>
+          <el-tab-pane label="视频">
+            <el-row class="gridCommon normalFont marginCommon" style="padding: 20px">
+              视频列表
+              <div v-for="i in videos" :key="i.id" class="marginCommon smallFont gridCommon">
+                <el-row>
+                  <el-col :span="20">{{i.name}}</el-col>
+                  <el-col :span="4">
+                    <div class="myButton" style="float:right;" v-on:click="onVideoButtonClick">观看</div>
+                  </el-col>
+                </el-row>
+              </div>
+            </el-row>
+          </el-tab-pane>
         </el-tabs>
       </el-col>
     </el-row>
@@ -105,6 +118,7 @@ export default {
       courseMaterials:[],
       courseHomework:[],
       courseQuiz:[],
+      videos: []
     }
   },
 
@@ -121,6 +135,10 @@ export default {
     // ];
     // this.courseBrief = "软件需求工程是最好的一门课！";
     this.courseMaterials = [
+      {id: 1, name: "UML课件"},
+      {id: 2, name: "需求课件"},
+    ];
+    this.videos= [
       {id: 1, name: "UML课件"},
       {id: 2, name: "需求课件"},
     ];
@@ -206,6 +224,9 @@ export default {
 
     },
 
+    onVideoButtonClick() {
+
+    }
   }
 }
 </script>

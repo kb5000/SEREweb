@@ -145,7 +145,7 @@ export default {
     },
 
     imgUploadSuccess(name) {
-      this.currentImg = name;
+      this.currentImg = '/data/' + name;
     },
 
     addQuestion() {

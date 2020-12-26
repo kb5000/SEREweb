@@ -12,12 +12,12 @@
       </div>
     </div>
     <div class="marginCommon normalFont gridCommon">
-      <div v-for="item in postList" :key="item.id" class="postEntry marginCommon gridCommon">
+      <div v-for="(item, index) in postList" :key="item.id" class="postEntry marginCommon gridCommon" @click="goPost(index)">
         <el-row style="padding: 10px">
-          <el-col span="15">{{item.title}}</el-col>
+          <el-col span="14" class="handCursor">{{item.title}}</el-col>
           <el-col span="3" class="unimportantFontColor">发帖人：<a style="textDecoration: none" :href="item.userLink">{{item.userName}}</a></el-col>
-          <el-col span="4" class="unimportantFontColor">发帖时间：{{item.date}}</el-col>
-          <el-col span="2"><div class="commonButton postContentControlButton">删除</div></el-col>
+          <el-col span="5" class="unimportantFontColor">发帖时间：{{item.date}}</el-col>
+          <el-col span="2"><div class="commonButton postContentControlButton" @click.stop="1">删除</div></el-col>
         </el-row>
         <!-- <p class="postContentTitle" v-on:click="onTitleClick(item)">{{item.title}}</p>
         <div class="postContentControl">
@@ -30,6 +30,7 @@
 
 <script>
 import axios from 'axios';
+import cookies from 'js-cookie'
 
 axios.defaults.headers = {
     "Content-Type": "application/x-www-form-urlencoded"
@@ -50,15 +51,30 @@ export default {
   mounted() {
     this.plateName = "测试板块"
     this.postList = []
-    for (let i = 0; i < 20; i++) {
-      this.postList.push({
-        id: i,
-        title: "Main函数为什么不能调用",
-        subject: "测试测试测试",
-        userName: "abc",
-        date: "2020/11/20 20:17"
+    // for (let i = 0; i < 20; i++) {
+    //   this.postList.push({
+    //     id: i,
+    //     title: "Main函数为什么不能调用",
+    //     // subject: "测试测试测试",
+    //     userName: "abc",
+    //     date: "2020/11/20 20:17"
+    //   })
+    // }
+
+    axios.post('/api', "method=get&key=course").then(courses => {
+      axios.post('/api', 'method=get&key=class.' + this.getQueryVariable('class')).then(res => {
+        this.plateName = courses.data[res.data.course].name + ' ' + res.data.name
+        if (typeof(res.data.post) === 'undefined') return;
+        for (let i of res.data.post) {
+          this.postList.push({
+            id: i.id,
+            title: i.title,
+            userName: i.user,
+            date: new Date(i.date).toLocaleString()
+          })
+        }
       })
-    }
+    })
   },
 
   methods: {
@@ -72,15 +88,26 @@ export default {
       return false;
     },
 
+    goPost(index) {
+      this.$router.push("/ForumDetail?class=" + this.getQueryVariable('class') + '&post=' + index)
+    },
+
     onPostButtonClick() {
-      axios({
-        method: 'get',
-        url: '/api?method=get&key=forum.plates.' + this.plateID + '.newID'
-      }).then(res => {
-        axios({
-          method: 'get',
-          url: '/api?method=setj&key=forum.plates.' + this.plateID + '.posts.' + res.data + ''
+      axios.post('/api', 'method=get&key=class.' + this.getQueryVariable('class')).then(res => {
+        let o = res.data.post;
+        if (typeof(o) === 'undefined') o = []
+        o.push({
+          id: this.$uuid.v4(),
+          title: this.postTitle,
+          user: cookies.get('user'),
+          date: new Date().toJSON(),
+          reply: [{user: cookies.get('user'), date: new Date().toJSON(), content: this.postContent}]
         })
+        axios.post('/api', 'method=setj&key=class.' + this.getQueryVariable('class') + '.post&val=' + 
+          encodeURIComponent(JSON.stringify(o))).then(() => {
+            this.$message.success("发帖成功")
+            setTimeout(() => this.$router.push("/ForumDetail?class=" + this.getQueryVariable('class') + '&post=' + (res.data.length - 1)), 500)
+          })
       })
     },
 

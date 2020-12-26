@@ -13,13 +13,15 @@
         <a :href="i.userLink" class="stressFontColor" style="text-decoration: none"><p class="marginCommon handCursor">{{i.user}}</p></a>
       </el-col>
       <el-col span="22" class="paddingCommon" style="border-left: 1px solid #D3D3D3">
-        <p class="marginCommon normalFont">{{i.content}}</p>
+        <p class="marginCommon normalFont" style="white-space: pre-wrap;">{{i.content}}</p>
         <div class="smallFont unimportantFontColor" style="height: 20px;">
           <p class="stressFontColor handCursor" 
-            style="position: absolute; right: 143px; bottom: -1px; text-decoration: underline;"
+            style="position: absolute; right: 183px; bottom: -3px; text-decoration: underline;"
+            v-if="user === i.uid || user == postUser"
           >删除</p>
           <p class="stressFontColor handCursor" 
-            style="position: absolute; right: 110px; bottom: -1px; text-decoration: underline;"
+            style="position: absolute; right: 151px; bottom: -3px; text-decoration: underline;"
+            @click="onReply(i.user, i.content)"
           >回复</p>
           <p style="position: absolute; right: 10px; ">{{i.date}}</p>
         </div>
@@ -37,24 +39,44 @@
 
 <script>
 import axios from 'axios';
+import cookies from 'js-cookie'
 
 export default {
   name: 'ForumDetail',
   data() {
     return {
+      user: cookies.get('user'),
       title: "",
       replies: [],
       replyContent: "",
+      postUser: 0
     }
   },
 
   mounted() {
-    this.title = "Main函数为什么不能调用";
-    this.replies = [
-      {id: 1, user: "李华", content: "重装VS重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试", userLink: "/", date: "2020/12/12 12:33"},
-      {id: 2, user: "ABC", content: "重装VS试试", userLink: "/", date: "2020/12/12 12:33"},
-      {id: 3, user: "ABC", content: "重装VS试试", userLink: "/", date: "2020/12/12 12:33"},
-    ]
+    // this.title = "Main函数为什么不能调用";
+    // this.replies = [
+    //   {id: 1, user: "李华", content: "重装VS重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试重装VS试", userLink: "/", date: "2020/12/12 12:33"},
+    //   {id: 2, user: "ABC", content: "重装VS试试", userLink: "/", date: "2020/12/12 12:33"},
+    //   {id: 3, user: "ABC", content: "重装VS试试", userLink: "/", date: "2020/12/12 12:33"},
+    // ]
+
+    axios.post('/api', 'method=get&key=class.' + this.getQueryVariable('class') + '.post.' + this.getQueryVariable('post')).then(res => {
+      this.title = res.data.title;
+      this.postUser = res.data.user;
+      axios.post('/api', 'method=get&key=user').then(user => {
+        for (let i of res.data.reply) {
+          this.replies.push({
+            id: i.id,
+            user: user.data[i.user].name,
+            uid: i.user,
+            content: i.content,
+            userLink: '/UserInfo?id=' + i.user,
+            date: new Date(i.date).toLocaleString()
+          })
+        }
+      })
+    })
   },
 
   methods: {
@@ -68,11 +90,26 @@ export default {
       return false;
     },
 
+    onReply(name, content) {
+      this.replyContent = 
+      "回复" + name + "：" + content.substring(0, 20) + "\n------------------------\n"
+    },
+
     onPostButtonClick() {
-      axios({
-        method: 'get',
-        url: '/api?method=add'
-      });
+      axios.post('/api', 'method=get&key=class.' + this.getQueryVariable('class') + '.post.' + this.getQueryVariable('post')).then(res => {
+        let reply = res.data.reply;
+        reply.push({
+          id: this.$uuid.v4(),
+          user: cookies.get('user'),
+          content: this.replyContent,
+          date: new Date().toJSON()
+        })
+        axios.post('/api', 'method=setj&key=class.' + this.getQueryVariable('class') + '.post.' + this.getQueryVariable('post') + '.reply&val=' + 
+          encodeURIComponent(JSON.stringify(reply))).then(() => {
+            this.$message.success("回帖成功")
+            setTimeout(() => this.$router.go(0));
+          })
+      })
     },
 
   }

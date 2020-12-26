@@ -77,7 +77,7 @@ export default {
       switch (num) {
         case 1: this.$router.push("/AdminAddCourse"); break;
         case 2: this.$router.push("/AdminDeleteCourse"); break;
-        case 3: this.$router.push("/AdminCourseStudentManagement"); break;
+        case 3: this.$router.push("/TeacherAddClass"); break;
         case 4: this.$router.push("/AdminSetTeacherRole"); break;
         case 5: this.$router.push("/AdminSetTARole"); break;
         case 6: this.$router.push("/AdminReleaseNotice"); break;

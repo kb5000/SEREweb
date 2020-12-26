@@ -11,7 +11,7 @@
       <el-row :gutter="10" class="gridCommon">
         <el-col :span="24">
           <el-row>
-            <el-col :span="8" class="bigFont">参与的课程与班级</el-col>
+            <el-col :span="12" class="bigFont">参与的课程与班级</el-col>
             <el-col :span="12">
               <el-select
                 v-model="condition"
