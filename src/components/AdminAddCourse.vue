@@ -24,7 +24,7 @@
             <el-option label="通识课" :value="false"></el-option>
             </el-select>
         </el-form-item>
-        <el-form-item label="开课时间">
+        <!-- <el-form-item label="开课时间">
             <el-col :span="11">
             <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
             </el-col>
@@ -33,7 +33,7 @@
             <el-col :span="11">
             <el-date-picker type="date" placeholder="选择日期" v-model="form.date2" style="width: 100%;"></el-date-picker>
             </el-col>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="仅本专业">
             <el-switch v-model="form.only"></el-switch>
         </el-form-item>
@@ -62,8 +62,8 @@ import axios from 'axios'
           id:'',
           teacher:'',
           category: '',
-          date1: '',
-          date2: '',
+          // date1: '',
+          // date2: '',
           only: false,
           type: [],
           resource: '',
@@ -77,8 +77,8 @@ import axios from 'axios'
           name: this.form.name,
           id: this.$uuid.v4(),
           isMajor: this.form.category,
-          startDate: this.form.date1,
-          endDate: this.form.date2,
+          // startDate: this.form.date1,
+          // endDate: this.form.date2,
           thisMajor: this.form.only,
           description: this.form.desc,
           teacher: this.form.teacher
