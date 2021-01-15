@@ -44,9 +44,9 @@
               我的作业
               <div v-for="i in myHomework" :key="i.id" class="marginCommon smallFont gridCommon">
                 <el-row>
-                  <el-col :span="8">提交时间：{{i.submitTime}}</el-col>
-                  <el-col :span="8">{{i.detail}}</el-col>
-                  <el-col :span="4">成绩：{{i.score}}</el-col>
+                  <el-col :span="7">提交时间：{{i.submitTime}}</el-col>
+                  <el-col :span="10">详情：{{i.detail}}</el-col>
+                  <el-col :span="3">成绩：{{i.score}}</el-col>
                   <el-col :span="4">
                     <div class="myButton" style="float:right;" @click="onDownloadButtonClick(i)">下载作业</div>
                   </el-col>

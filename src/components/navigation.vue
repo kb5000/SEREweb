@@ -39,25 +39,37 @@
     </a>
     <el-dialog title="资源管理" :visible.sync="dialogVisibleFile">
       <el-row class="gridCommon">
-        <span class="normalFont">为 {{ courseName }} 添加文件</span>
+        <!-- <span class="normalFont">资源管理</span> -->
         <el-row>
-          <el-table :data="files" height="200" border style="width: 100%">
+          <el-table :data="files" height="200" border style="width: 100%" @selection-change="selectionChange">
             <el-table-column prop="" label="选择" width="50" type="selection">
             </el-table-column>
-            <el-table-column prop="name" label="文件名" width="180">
+            <el-table-column prop="name" label="文件名" >
             </el-table-column>
-            <el-table-column prop="size" label="大小"> </el-table-column>
+            <el-table-column prop="size" label="动作" width="70">
+              <template slot-scope="scope">
+                <el-button type="text" size="small" @click="downloadFile(scope.row)">下载</el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </el-row>
         <el-row>
-          <el-upload action="/data">
+          <!-- <el-upload action="/data">
             <el-button type="text" icon="el-icon-plus">上传本地文件</el-button>
-          </el-upload>
+          </el-upload> -->
+          <el-col :span="5">
+            <el-upload action="/data" :on-success="handleFileUpload" :file-list="fileList">
+              <el-button type="text" icon="el-icon-plus">上传本地文件</el-button>
+            </el-upload>
+          </el-col>
+          <el-col :span="5">
+            <el-button type="text" icon="el-icon-delete" @click="handleFileRemove">删除选中文件</el-button>
+          </el-col>
         </el-row>
       </el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisibleFile = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisibleFile = false"
+        <el-button type="primary" @click="updateUserFile"
           >确 定</el-button
         >
       </span>
@@ -85,29 +97,34 @@ export default {
       login: "/UserLogin",
       files: [],
       dialogVisibleFile: false,
+      fileList: [],
+      selected: [],
+      loggedUserID: 0,
     };
   },
 
   mounted() {
     // console.log(this.logged)
     let user = cookies.get("user");
-    this.loggedUser = user;
+    this.loggedUserID = user;
     if (typeof user !== "undefined") {
       this.logged = true;
       axios.post("/api", "method=get&key=user." + user).then((res) => {
         this.loggedUser = res.data;
-        // console.log(this.loggedUser)
+        console.log(this.loggedUser)
+        this.files = this.loggedUser.file;
+        if (typeof(this.files) === 'undefined') this.files = [];
       });
     } else {
       this.logged = false;
     }
 
-    this.files = [
-      { id: 0, name: "ch1.pdf", size: "1MB", checked: false },
-      { id: 1, name: "ch2.pdf", size: "2KB", checked: false },
-      { id: 2, name: "ch3.pdf", size: "1MB", checked: false },
-      { id: 3, name: "ch4.pdf", size: "2KB", checked: false },
-    ];
+    // this.files = [
+    //   { id: 0, name: "ch1.pdf", size: "1MB", checked: false },
+    //   { id: 1, name: "ch2.pdf", size: "2KB", checked: false },
+    //   { id: 2, name: "ch3.pdf", size: "1MB", checked: false },
+    //   { id: 3, name: "ch4.pdf", size: "2KB", checked: false },
+    // ];
   },
 
   methods: {
@@ -123,6 +140,42 @@ export default {
       this.logged = false;
       cookies.remove('user');
       this.$router.push('/UserLogin');
+    },
+
+    handleFileUpload(dat, file) {
+      this.files.push({
+        name: file.name,
+        url: dat,
+      })
+    },
+
+    handleFileRemove() {
+      for (let i of this.selected) {
+        for (let j = 0; j < this.files.length; j++) {
+          if (i.url == this.files[j].url) {
+            this.files.splice(j, 1);
+            break;
+          }
+        }
+      }
+      this.selected = []
+      this.fileList = []
+    },
+
+    selectionChange(data) {
+      this.selected = data;
+    },
+
+    downloadFile(row) {
+      window.open('/data/' + row.url);
+    },
+
+    updateUserFile() {
+      axios.post('/api', 'method=setj&key=user.' + this.loggedUser.id + '.file&val=' + 
+        encodeURIComponent(JSON.stringify(this.files))).then(() => {
+          this.dialogVisibleFile = false;
+          this.$message.success("上传成功");
+        })
     },
   },
 };

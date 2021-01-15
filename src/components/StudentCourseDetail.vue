@@ -36,11 +36,11 @@
           <el-tab-pane label="课件">
             <el-row class="gridCommon normalFont marginCommon" style="padding: 20px">
               课件列表
-              <div v-for="i in courseMaterials" :key="i.id" class="marginCommon smallFont gridCommon">
+              <div v-for="(i,idx) in courseMaterials" :key="idx" class="marginCommon smallFont gridCommon">
                 <el-row>
                   <el-col :span="20">{{i.name}}</el-col>
                   <el-col :span="4">
-                    <div class="myButton" style="float:right;" v-on:click="onDownloadButtonClick">下载</div>
+                    <div class="myButton" style="float:right;" v-on:click="onDownloadButtonClick(i.url)">下载</div>
                   </el-col>
                 </el-row>
               </div>
@@ -134,10 +134,10 @@ export default {
     //   {id: 2, user: "刘玉生", userLink: "/"},
     // ];
     // this.courseBrief = "软件需求工程是最好的一门课！";
-    this.courseMaterials = [
-      {id: 1, name: "UML课件"},
-      {id: 2, name: "需求课件"},
-    ];
+    // this.courseMaterials = [
+    //   {id: 1, name: "UML课件"},
+    //   {id: 2, name: "需求课件"},
+    // ];
     this.videos= [
       {id: 1, name: "UML课件"},
       {id: 2, name: "需求课件"},
@@ -174,6 +174,7 @@ export default {
         }
         this.courseBrief = courseData.description;
         this.title = courseData.name + " " + classData.name
+        this.courseMaterials = classData.file;
         for (let i in classData.homework) {
           let o = classData.homework[i]
           this.courseHomework.push({
@@ -220,8 +221,8 @@ export default {
       });
     },
 
-    onDownloadButtonClick() {
-
+    onDownloadButtonClick(url) {
+      window.open('/data/' + url)
     },
 
     onVideoButtonClick() {

@@ -40,7 +40,7 @@
           </el-col>
         </el-row>
       </el-row>
-      <el-row :gutter="10" class="gridCommon">
+      <el-row :gutter="10" class="gridCommon marginCommon">
         <el-col :span="24">
           <el-row>
             <el-col :span="8" class="bigFont"
@@ -62,7 +62,7 @@
               </el-select>
             </el-col>
           </el-row>
-          <el-row class="gridCommon">
+          <el-row class="gridCommon marginCommon">
             <span class="normalFont">为以下选中的班级上传文件</span>
             <el-row>
               <div v-for="i in classes" :key="i.id">
@@ -99,28 +99,28 @@
                     </el-dropdown>
                   </el-col>
                   <el-col :span="2">
-                    <el-checkbox v-model="i.checked" style="float: right"
+                    <!-- <el-checkbox v-model="i.checked" style="float: right"
                       >选择</el-checkbox
+                    > -->
+                    <el-button
+                      style="float: right; padding: 3px 0"
+                      type="text"
+                      icon="el-icon-plus"
+                      @click="onFileManageButtonClick(i)"
                     >
+                      管理文件
+                    </el-button>
                   </el-col>
                 </el-row>
               </div>
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-button
-                  style="float: right; padding: 3px 0"
-                  type="text"
-                  icon="el-icon-plus"
-                  @click="dialogVisibleFile = true"
-                >
-                  添加文件
-                </el-button>
               </el-col>
             </el-row>
           </el-row>
-          <el-row class="gridCommon">
-            <span class="normalFont">课程资源</span>
+          <el-row class="gridCommon marginCommon">
+            <span class="normalFont">你的资源</span>
             <el-col :span="24">
               <el-row>
                 <div v-for="i in filesForCourse" :key="i.id">
@@ -257,25 +257,36 @@
     </el-dialog>
     <el-dialog title="资源管理" :visible.sync="dialogVisibleFile">
       <el-row class="gridCommon">
-        <span class="normalFont">为 {{ courseName }} 添加文件</span>
+        <span class="normalFont">为 {{ currentClass ? currentClass.name : "" }} 添加文件</span>
+        <br/>
+        <br/>
         <el-row>
-          <el-table :data="files" height="200" border style="width: 100%">
+          <el-table :data="currentClass.file" height="200" border style="width: 100%" @selection-change="selectionChange">
             <el-table-column prop="" label="选择" width="50" type="selection">
             </el-table-column>
-            <el-table-column prop="name" label="文件名" width="180">
+            <el-table-column prop="name" label="文件名">
             </el-table-column>
-            <el-table-column prop="size" label="大小"> </el-table-column>
+            <el-table-column prop="size" label="动作" width="70">
+              <template slot-scope="scope">
+                <el-button type="text" size="small" @click="downloadFile(scope.row)">下载</el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </el-row>
         <el-row>
-          <el-upload action="/data">
-            <el-button type="text" icon="el-icon-plus">上传本地文件</el-button>
-          </el-upload>
+          <el-col :span="5">
+            <el-upload action="/data" :on-success="handleFileUpload" :file-list="fileList">
+              <el-button type="text" icon="el-icon-plus">上传本地文件</el-button>
+            </el-upload>
+          </el-col>
+          <el-col :span="5">
+            <el-button type="text" icon="el-icon-delete" @click="handleFileRemove">删除选中文件</el-button>
+          </el-col>
         </el-row>
       </el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisibleFile = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisibleFile = false"
+        <el-button type="primary" @click="updateClassFile"
           >确 定</el-button
         >
       </span>
@@ -308,11 +319,15 @@ export default {
       selectClassId: 0,
       dialogVisibleClassDeliver: false,
       dialogVisibleFile: false,
+      currentClass: null,
+      fileList: [],
+      selected: [],
     };
   },
 
   mounted() {
     this.courseName = "微积分（甲）1";
+    this.currentClass = {file: []};
     // this.classes = [
     //   {
     //     id: 0,
@@ -403,7 +418,7 @@ export default {
           this.classes.push(j)
         }
       }
-      console.log(JSON.stringify(this.classes))
+      // console.log(JSON.stringify(this.classes))
     })
   },
 
@@ -425,6 +440,51 @@ export default {
         method: "get",
         url: "/api?method=add",
       });
+    },
+
+    onFileManageButtonClick(classData) {
+      this.currentClass = classData;
+      if (typeof(this.currentClass.file) === 'undefined') this.currentClass.file = [];
+      this.dialogVisibleFile = true
+    },
+
+    handleFileUpload(dat, file) {
+      if (typeof(this.currentClass.file) === 'undefined') this.currentClass.file = [];
+      this.currentClass.file.push({
+        name: file.name,
+        url: dat,
+      })
+      // console.log(dat);
+      // console.log(file);
+    },
+
+    handleFileRemove() {
+      for (let i of this.selected) {
+        for (let j = 0; j < this.currentClass.file.length; j++) {
+          if (i.url == this.currentClass.file[j].url) {
+            this.currentClass.file.splice(j, 1);
+            break;
+          }
+        }
+      }
+      this.selected = []
+      this.fileList = []
+    },
+
+    selectionChange(data) {
+      this.selected = data;
+    },
+
+    downloadFile(row) {
+      window.open('/data/' + row.url);
+    },
+
+    updateClassFile() {
+      axios.post('/api', 'method=setj&key=class.' + this.currentClass.id + '.file&val=' + 
+        encodeURIComponent(JSON.stringify(this.currentClass.file))).then(() => {
+          this.dialogVisibleFile = false;
+          this.$message.success("上传成功");
+        })
     },
 
     updateCourseDetail() {
@@ -456,10 +516,10 @@ export default {
 
 <style scoped>
 .page {
-  position: relative;
+  /* position: relative;
   width: 80%;
   left: 10%;
-  background-color: white;
+  background-color: white; */
 }
 .cardWrap {
   margin: 2px;

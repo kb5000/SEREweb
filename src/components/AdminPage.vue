@@ -35,6 +35,9 @@
         <el-col span:="4">
           <el-button type="text" @click="clickButton(6)">发布通知</el-button>
         </el-col>
+        <!-- <el-col span:="4">
+          <el-button type="text" @click="clickButton(7)">用户管理</el-button>
+        </el-col> -->
       </el-row>      
     </div>
     <div class="tail">
@@ -81,6 +84,7 @@ export default {
         case 4: this.$router.push("/AdminSetTeacherRole"); break;
         case 5: this.$router.push("/AdminSetTARole"); break;
         case 6: this.$router.push("/AdminReleaseNotice"); break;
+        case 7: this.$router.push("/AdminUserManagementPage"); break;
       }
     }
 
